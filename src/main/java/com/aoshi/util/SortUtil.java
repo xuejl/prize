@@ -1,0 +1,97 @@
+package com.aoshi.util;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.ComparatorUtils;
+import org.apache.commons.collections.comparators.ComparableComparator;
+import org.apache.commons.collections.comparators.ComparatorChain;
+
+public class SortUtil {
+	public static void main(String[] args) {
+		System.out.println(testMapSort());
+	}
+
+	/**
+	 * 对list进行排序
+	 * 
+	 * @param sortList
+	 *            需要排序的list
+	 * @param param1
+	 *            排序的参数名称
+	 * @param orderType
+	 *            排序类型：正序-asc；倒序-desc
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<?> sort(List<?> sortList, String param1, String orderType) {
+		Comparator<?> mycmp1 = ComparableComparator.getInstance();
+		if ("desc".equals(orderType)) {
+			mycmp1 = ComparatorUtils.reversedComparator(mycmp1); // 逆序（默认为正序）
+		}
+
+		ArrayList<Object> sortFields = new ArrayList<Object>();
+		sortFields.add(new BeanComparator<Object>(param1, mycmp1)); // 主排序（第一排序）
+
+		ComparatorChain multiSort = new ComparatorChain(sortFields);
+		Collections.sort(sortList, multiSort);
+
+		return sortList;
+	}
+
+	/**
+	 * 对list进行排序
+	 * 
+	 * @param sortList
+	 *            需要排序的list
+	 * @param param1
+	 *            排序的参数名称:参数长度
+	 * @param param2
+	 *            排序的参数名称:排序参数
+	 * @param orderType
+	 *            排序类型：正序-asc；倒序-desc
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<?> sortParam2(List<?> sortList, String param1, String param2, String orderType) {
+		Comparator<?> mycmp1 = ComparableComparator.getInstance();
+		Comparator<?> mycmp2 = ComparableComparator.getInstance();
+		if ("desc".equals(orderType)) {
+			mycmp1 = ComparatorUtils.reversedComparator(mycmp1); // 逆序（默认为正序）
+		}
+
+		ArrayList<Object> sortFields = new ArrayList<Object>();
+		sortFields.add(new BeanComparator<Object>(param1, mycmp1)); // 主排序（第一排序）
+		sortFields.add(new BeanComparator<Object>(param2, mycmp2)); // 主排序（第一排序）
+
+		ComparatorChain multiSort = new ComparatorChain(sortFields);
+		Collections.sort(sortList, multiSort);
+
+		return sortList;
+	}
+
+	public static List<?> testMapSort() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("name", "1");
+		map.put("age", "1");
+
+		Map<String, String> map2 = new HashMap<String, String>();
+		map2.put("name", "2");
+		map2.put("age", "13");
+
+		Map<String, String> map1 = new HashMap<String, String>();
+		map1.put("name", "2");
+		map1.put("age", "12");
+
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		list.add(map);
+		list.add(map1);
+		list.add(map2);
+
+		return sortParam2(list, "name", "age", "asc");
+	}
+
+}

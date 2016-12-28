@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.CalNumRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.CalNumRecord" >
+    <id column="num_record_id" property="numRecordId" jdbcType="INTEGER" />
+    <result column="record_num" property="recordNum" jdbcType="INTEGER" />
+    <result column="prize_id" property="prizeId" jdbcType="INTEGER" />
+    <result column="num_set_id" property="numSetId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    num_record_id, record_num, prize_id, num_set_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cal_num_record
+    where num_record_id = #{numRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cal_num_record
+    where num_record_id = #{numRecordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.CalNumRecord" >
+    insert into cal_num_record (num_record_id, record_num, prize_id, 
+      num_set_id)
+    values (#{numRecordId,jdbcType=INTEGER}, #{recordNum,jdbcType=INTEGER}, #{prizeId,jdbcType=INTEGER}, 
+      #{numSetId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.CalNumRecord" >
+    insert into cal_num_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="numRecordId != null" >
+        num_record_id,
+      </if>
+      <if test="recordNum != null" >
+        record_num,
+      </if>
+      <if test="prizeId != null" >
+        prize_id,
+      </if>
+      <if test="numSetId != null" >
+        num_set_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="numRecordId != null" >
+        #{numRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="recordNum != null" >
+        #{recordNum,jdbcType=INTEGER},
+      </if>
+      <if test="prizeId != null" >
+        #{prizeId,jdbcType=INTEGER},
+      </if>
+      <if test="numSetId != null" >
+        #{numSetId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.CalNumRecord" >
+    update cal_num_record
+    <set >
+      <if test="recordNum != null" >
+        record_num = #{recordNum,jdbcType=INTEGER},
+      </if>
+      <if test="prizeId != null" >
+        prize_id = #{prizeId,jdbcType=INTEGER},
+      </if>
+      <if test="numSetId != null" >
+        num_set_id = #{numSetId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where num_record_id = #{numRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.CalNumRecord" >
+    update cal_num_record
+    set record_num = #{recordNum,jdbcType=INTEGER},
+      prize_id = #{prizeId,jdbcType=INTEGER},
+      num_set_id = #{numSetId,jdbcType=INTEGER}
+    where num_record_id = #{numRecordId,jdbcType=INTEGER}
+  </update>
+</mapper>

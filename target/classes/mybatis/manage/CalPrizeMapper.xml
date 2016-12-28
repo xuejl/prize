@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.CalPrizeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.CalPrize" >
+    <id column="prize_id" property="prizeId" jdbcType="INTEGER" />
+    <result column="prize_name" property="prizeName" jdbcType="VARCHAR" />
+    <result column="prize_level_id" property="prizeLevelId" jdbcType="INTEGER" />
+    <result column="num_set_id" property="numSetId" jdbcType="INTEGER" />
+    <result column="remain_time" property="remainTime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_id, prize_name, prize_level_id, num_set_id, remain_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cal_prize
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cal_prize
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.CalPrize" >
+    insert into cal_prize (prize_id, prize_name, prize_level_id, 
+      num_set_id, remain_time)
+    values (#{prizeId,jdbcType=INTEGER}, #{prizeName,jdbcType=VARCHAR}, #{prizeLevelId,jdbcType=INTEGER}, 
+      #{numSetId,jdbcType=INTEGER}, #{remainTime,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.CalPrize" >
+    insert into cal_prize
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeId != null" >
+        prize_id,
+      </if>
+      <if test="prizeName != null" >
+        prize_name,
+      </if>
+      <if test="prizeLevelId != null" >
+        prize_level_id,
+      </if>
+      <if test="numSetId != null" >
+        num_set_id,
+      </if>
+      <if test="remainTime != null" >
+        remain_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeId != null" >
+        #{prizeId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeName != null" >
+        #{prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeLevelId != null" >
+        #{prizeLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="numSetId != null" >
+        #{numSetId,jdbcType=INTEGER},
+      </if>
+      <if test="remainTime != null" >
+        #{remainTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.CalPrize" >
+    update cal_prize
+    <set >
+      <if test="prizeName != null" >
+        prize_name = #{prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeLevelId != null" >
+        prize_level_id = #{prizeLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="numSetId != null" >
+        num_set_id = #{numSetId,jdbcType=INTEGER},
+      </if>
+      <if test="remainTime != null" >
+        remain_time = #{remainTime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.CalPrize" >
+    update cal_prize
+    set prize_name = #{prizeName,jdbcType=VARCHAR},
+      prize_level_id = #{prizeLevelId,jdbcType=INTEGER},
+      num_set_id = #{numSetId,jdbcType=INTEGER},
+      remain_time = #{remainTime,jdbcType=INTEGER}
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateAllData" parameterType="int" >
+    update cal_prize set remain_time = 1 where prize_id = 1;
+    update cal_prize set remain_time = 2 where prize_id = 2;
+    update cal_prize set remain_time = 2 where prize_id = 3;
+    update cal_prize set remain_time = 1 where prize_id = 4;
+    update cal_prize set remain_time = 12 where prize_id = 5;
+    update cal_prize set remain_time = 10 where prize_id = 6;
+    update cal_prize set remain_time = 6 where prize_id = 7;
+    update cal_prize set remain_time = 58 where prize_id = 8;
+    update cal_prize set remain_time = 10 where prize_id = 9;
+    update cal_prize set remain_time = 5 where prize_id = 10;
+    update cal_prize set remain_time = 30 where prize_id = 11;
+    update cal_prize set remain_time = 40 where prize_id = 12;
+  </update>
+
+</mapper>

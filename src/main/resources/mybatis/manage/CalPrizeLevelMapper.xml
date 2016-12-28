@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.CalPrizeLevelMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.CalPrizeLevel" >
+    <id column="prize_level_id" property="prizeLevelId" jdbcType="INTEGER" />
+    <result column="prize_level_name" property="prizeLevelName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_level_id, prize_level_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cal_prize_level
+    where prize_level_id = #{prizeLevelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cal_prize_level
+    where prize_level_id = #{prizeLevelId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.CalPrizeLevel" >
+    insert into cal_prize_level (prize_level_id, prize_level_name)
+    values (#{prizeLevelId,jdbcType=INTEGER}, #{prizeLevelName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.CalPrizeLevel" >
+    insert into cal_prize_level
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeLevelId != null" >
+        prize_level_id,
+      </if>
+      <if test="prizeLevelName != null" >
+        prize_level_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeLevelId != null" >
+        #{prizeLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeLevelName != null" >
+        #{prizeLevelName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.CalPrizeLevel" >
+    update cal_prize_level
+    <set >
+      <if test="prizeLevelName != null" >
+        prize_level_name = #{prizeLevelName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where prize_level_id = #{prizeLevelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.CalPrizeLevel" >
+    update cal_prize_level
+    set prize_level_name = #{prizeLevelName,jdbcType=VARCHAR}
+    where prize_level_id = #{prizeLevelId,jdbcType=INTEGER}
+  </update>
+</mapper>
