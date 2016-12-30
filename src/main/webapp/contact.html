@@ -35,12 +35,13 @@
       <th>操作</th>
     </thead>
     <tbody>
-        <tr>
-          <td>mark</td>
-          <td>mark</td>
-          <td>mark</td>
+        <tr ng-repeat = "data in dataList">
+        <td>{{data.maxNum}}</td>
+        <td>{{data.minNum}}</td>
+        <td>{{data.time}}</td>
           <td>
-              <button type="button" class="btn btn-primary">编辑</button>
+              <button type="button" class="btn btn-primary"
+              onclick="javascript:window.location.href=contactEdit.html?id={{data.numSetId}}">编辑</button>
           </td>
         </tr>
     </tbody>
@@ -52,7 +53,7 @@
     var app = angular.module('app', [])
     app.controller('ctrl', function($scope, $http){
         $http.get("").success(function(response){
-            $scope.prizeList = response
+            $scope.dataList = response;
         })
     })
 
@@ -79,6 +80,19 @@
             }
         })
         
+    }
+    function add() {
+        app.controller("ctrl", function($scope, $http)) {
+            $http.get().success(function(response) {
+                if(response.errorCode == 200) {
+                    alert("添加成功");
+                    history.go(0);
+                }else {
+                    alert("更新失败.请稍后再试") 
+                }
+            }) 
+        
+        })
     }
 </script>
 

@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="91bc658d-c161-48b4-b899-d020d2e05aa9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/aoshi/controller/CalController.java" afterPath="$PROJECT_DIR$/src/main/java/com/aoshi/controller/CalController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/aoshi/dao/CalNumRecordMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/aoshi/dao/CalNumRecordMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/aoshi/dao/CalNumSetMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/aoshi/dao/CalNumSetMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/contact.html" afterPath="$PROJECT_DIR$/src/main/webapp/contact.html" />
     </list>
     <list id="767dbabe-63e8-45cd-b078-c608338aaab5" name="New changelist" comment="" />
     <ignored path="redRain.iws" />
@@ -1062,7 +1058,7 @@
       <workItem from="1482906501270" duration="1272000" />
       <workItem from="1482913311027" duration="5823000" />
       <workItem from="1483085776569" duration="135000" />
-      <workItem from="1483085927247" duration="5238000" />
+      <workItem from="1483085927247" duration="5393000" />
     </task>
     <task id="LOCAL-00001" summary="添加背景图片">
       <created>1474372520945</created>
@@ -1369,7 +1365,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="305081000" />
+    <option name="totallyTimeSpent" value="305236000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1382,7 +1378,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="71" y="24" width="1849" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.56237006" sideWeight="0.4958632" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1393,7 +1389,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57588357" sideWeight="0.6862202" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35446987" sideWeight="0.8251245" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32848233" sideWeight="0.48920864" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3236212" sideWeight="0.7908135" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3236212" sideWeight="0.7908135" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21582733" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
