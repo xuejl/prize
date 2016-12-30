@@ -31,4 +31,5 @@ public interface CalNumRecordMapper {
 
     @Delete("delete from cal_num_record")
     int cleanTable();
+
 }

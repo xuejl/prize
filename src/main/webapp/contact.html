@@ -45,6 +45,8 @@
         </tr>
     </tbody>
 </table>
+<button type="button" class="btn btn-primary" onclick="add()">新增</button>
+<button type="button" class="btn btn-primary" onclick="delete()">删除</button>
 </div>
 <script>
     var app = angular.module('app', [])
@@ -64,6 +66,19 @@
                 } 
             })
         })
+    }
+    
+    function delete() {
+        app.controller('ctrl', function($scope, $http){
+            $http.get("").success(function(response) {
+            if(response.errorCode == 200){
+                alert("删除成功")
+                history.go(0);
+            }else {
+                alert("删除失败");
+            }
+        })
+        
     }
 </script>
 

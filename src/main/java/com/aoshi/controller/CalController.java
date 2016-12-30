@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -265,31 +262,48 @@ public class CalController {
         return data;
     }
 
-//    /**
-//     * 重置
-//     *
-//     * @param
-//     * @return
-//     */
-//    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
-//    @RequestMapping("getPrize")
-//    @ResponseBody
-//    public Map<String, Object> resetData() {
-//        calNumRecordMapper.cleanTable();
-//        for (int i = 0; i < 1512; i++) {
-//            String index = String.valueOf(i);
-//            if (index.substring(index.length() - 1, index.length()).equals("4")) {
-//                CalNumRecord calNumRecord = new CalNumRecord();
-//                calNumRecord.setPrizeId(0);
-//                calNumRecord.setRecordNum(i);
-//                calNumRecord.setNumSetId(0);
-//                calNumRecordMapper.insert(calNumRecord);
-//            }
-//        }
-//        calPrizeMapper.updateAllData();
-//        Map<String, Object> data = new HashMap<>();
-//        data.put("errorCode", 200);
-//        return data;
-//    }
+    /**
+     * 添加抽奖的计算num
+     * @param
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("addCalNum")
+    @ResponseBody
+    public Map<String, Object> addCalNumRecord(CalNumSet calNumSet) {
+        if (calNumSet.getNumSetId() == null) {
+            calNumSetMapper.insert(calNumSet);
+        }else {
+            calNumSetMapper.updateByPrimaryKey(calNumSet);
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        return data;
+    }
+
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("selectCalNum")
+    @ResponseBody
+    public Map<String, Object> deleteCalNulRecord(@RequestParam(value = "id[]") List<Integer> id) {
+        for (Integer i : id) {
+            calNumSetMapper.deleteByPrimaryKey(i);
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        return data;
+    }
+
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("selectCalNum")
+    @ResponseBody
+    public Map<String, Object> selectCalNum() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        data.put("data", calNumSetMapper.selectAll());
+        return data;
+    }
+
 
 }
+
+
