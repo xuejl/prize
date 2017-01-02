@@ -282,7 +282,7 @@ public class CalController {
     }
 
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
-    @RequestMapping("selectCalNum")
+    @RequestMapping("deleteCalNulRecord")
     @ResponseBody
     public Map<String, Object> deleteCalNulRecord(@RequestParam(value = "id[]") List<Integer> id) {
         for (Integer i : id) {
