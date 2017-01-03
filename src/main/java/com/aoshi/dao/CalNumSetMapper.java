@@ -17,7 +17,6 @@ public interface CalNumSetMapper {
     int updateByPrimaryKeySelective(CalNumSet record);
 
     int updateByPrimaryKey(CalNumSet record);
-
-    @Select("select * from cal_num_set")
+    @Select("select * from cal_num_set ")
     List<CalNumSet> selectAll();
 }

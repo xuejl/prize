@@ -23,6 +23,7 @@ import java.util.Map;
 /**
  * CalController
  * http://localhost:8080/redRain/app/goToSetCalNum
+ *
  * @author zf
  * @date 10/27/16
  */
@@ -45,7 +46,8 @@ public class CalController {
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
     @RequestMapping("getRandomCode")
     @ResponseBody
-    @Transactional public Object getRandomCode(Integer calNumId, Integer prizeId) {
+    @Transactional
+    public Object getRandomCode(Integer calNumId, Integer prizeId) {
         CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(calNumId);
         List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(calNumId);
 
@@ -72,7 +74,7 @@ public class CalController {
                 for (int i = 0; i < count; i++) {
                     createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
                 }
-            }else{
+            } else {
                 createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
 
             }
@@ -119,6 +121,7 @@ public class CalController {
 
     /**
      * 产生幸运码
+     *
      * @param calNumId
      * @param prizeId
      * @param allRecords
@@ -141,6 +144,7 @@ public class CalController {
 
     /**
      * 移除中奖号码
+     *
      * @param calNumSet
      * @param calNumRecords
      * @return
@@ -220,6 +224,38 @@ public class CalController {
         return data;
     }
 
+    /**
+     * 根据奖品等级获取奖品
+     *
+     * @param prizeLevelId
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("getPrizeById")
+    @ResponseBody
+    public Map<String, Object> getPrizeById(Integer prizeLevelId) {
+        CalPrize calPrizes = calPrizeMapper.selectByPrimaryKey(prizeLevelId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        data.put("data", calPrizes);
+        return data;
+    }
+
+    /**
+     * 根据奖品等级获取奖品
+     *
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("getCalNumSet")
+    @ResponseBody
+    public Map<String, Object> getCalNumSet() {
+        List<CalNumSet> calNumSets = calNumSetMapper.selectAll();
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        data.put("data", calNumSets);
+        return data;
+    }
 
     /**
      * 获取中奖列表
@@ -264,6 +300,7 @@ public class CalController {
 
     /**
      * 添加抽奖的计算num
+     *
      * @param
      * @return
      */
@@ -273,7 +310,7 @@ public class CalController {
     public Map<String, Object> addCalNumRecord(CalNumSet calNumSet) {
         if (calNumSet.getNumSetId() == null) {
             calNumSetMapper.insert(calNumSet);
-        }else {
+        } else {
             calNumSetMapper.updateByPrimaryKey(calNumSet);
         }
         Map<String, Object> data = new HashMap<>();
@@ -281,8 +318,14 @@ public class CalController {
         return data;
     }
 
+    /**
+     * 获取抽奖次数
+     *
+     * @param id 删除抽奖号码
+     * @return
+     */
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
-    @RequestMapping("deleteCalNulRecord")
+    @RequestMapping("deleteCalNumRecord")
     @ResponseBody
     public Map<String, Object> deleteCalNulRecord(@RequestParam(value = "id[]") List<Integer> id) {
         for (Integer i : id) {
@@ -293,6 +336,11 @@ public class CalController {
         return data;
     }
 
+    /**
+     * 获取抽奖的方式.
+     *
+     * @return
+     */
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
     @RequestMapping("selectCalNum")
     @ResponseBody
@@ -303,6 +351,58 @@ public class CalController {
         return data;
     }
 
+    /**
+     * 获取奖品列表
+     *
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("prizeList")
+    @ResponseBody
+    public Map<String, Object> prizeList() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        data.put("data", calPrizeMapper.selectAll());
+        return data;
+    }
+
+    /**
+     * 添加抽奖的计算num
+     *
+     * @param
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("addPrize")
+    @ResponseBody
+    public Map<String, Object> addPrize(CalPrize prize) {
+        if (prize.getPrizeId() == null) {
+            calPrizeMapper.insert(prize);
+        } else {
+            calPrizeMapper.updateByPrimaryKey(prize);
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        return data;
+    }
+
+    /**
+     * 获取抽奖次数
+     *
+     * @param id 删除抽奖号码
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("delPrize")
+    @ResponseBody
+    public Map<String, Object> delPrize(@RequestParam(value = "id[]") List<Integer> id) {
+        for (Integer i : id) {
+            calPrizeMapper.deleteByPrimaryKey(i);
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        return data;
+    }
 
 }
 

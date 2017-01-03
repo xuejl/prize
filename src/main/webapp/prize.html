@@ -24,7 +24,7 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<div class="panel panel-default">
+<div class="panel panel-default" style="padding-top: 50px">
   <div class="panel-heading">奖品管理</div>
 <table name="contact" class="table" >
     <thead>  
@@ -35,14 +35,16 @@
       <th>操作</th>
     </thead>
     <tbody ng-app="app" ng-controller="ctrl">
-        <tr>
-          <td>mark</td>
-          <td>mark</td>
-          <td>mark</td>
-          <td>mark</td>
-          <td>
-              <button type="button" class="btn btn-primary">编辑</button>
-          </td> 
+        <tr ng-repeat="prize in prizeList">
+        <td>{{prize.prizeName}}</td>
+        <td>{{prize.level.prizeLevelName}}</td>
+        <td>一次抽{{prize.numSet.time}}个号码</td>
+        <td>{{prize.remainTime}}</td>
+        <td>
+        <button type="button" class="btn btn-primary"
+                ng-click =goEdit(prize.prizeId)>编辑</button>
+       
+        </td>
         </tr>
     </tbody>
 </table>
@@ -50,10 +52,15 @@
 <script>
     var app = angular.module('app', [])
     app.controller('ctrl', function($scope, $http){
-        $http.get("app/getPrizeList").success(function(response){
-            $scope.prizeList = response
+        $http.get("app/prizeList").success(function(response){
+            console.log("response == >" + JSON.stringify(response));
+            $scope.prizeList = response.data;
         })
+        $scope.goEdit = function(prizeId) {
+            window.open("prizeEdit.html?prizeId=" + prizeId);
+        }
     })
+
 </script>
 
 </body>

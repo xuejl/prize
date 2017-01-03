@@ -11,6 +11,27 @@ public class CalPrize {
 
     private Integer remainTime;
 
+    private CalPrizeLevel level;
+
+    private CalNumSet numSet;
+
+
+    public CalNumSet getNumSet() {
+        return numSet;
+    }
+
+    public void setNumSet(CalNumSet numSet) {
+        this.numSet = numSet;
+    }
+
+    public CalPrizeLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(CalPrizeLevel level) {
+        this.level = level;
+    }
+
     public Integer getPrizeId() {
         return prizeId;
     }

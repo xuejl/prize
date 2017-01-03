@@ -8,6 +8,10 @@
     <result column="num_set_id" property="numSetId" jdbcType="INTEGER" />
     <result column="remain_time" property="remainTime" jdbcType="INTEGER" />
   </resultMap>
+  <resultMap id="WithLevel" extends="BaseResultMap" type="com.aoshi.domain.CalPrize" >
+    <association property="level" notNullColumn="prize_level_id" resultMap="com.aoshi.dao.CalPrizeLevelMapper.BaseResultMap" column="prize_level_id" />
+    <association property="numSet" notNullColumn="num_set_id" resultMap="com.aoshi.dao.CalNumSetMapper.BaseResultMap" column="num_set_id" />
+  </resultMap>
   <sql id="Base_Column_List" >
     prize_id, prize_name, prize_level_id, num_set_id, remain_time
   </sql>

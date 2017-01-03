@@ -7,6 +7,8 @@ public class CalNumSet {
 
     private Integer minNum;
 
+    private Integer time;
+
     public Integer getNumSetId() {
         return numSetId;
     }
@@ -29,5 +31,13 @@ public class CalNumSet {
 
     public void setMinNum(Integer minNum) {
         this.minNum = minNum;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
     }
 }

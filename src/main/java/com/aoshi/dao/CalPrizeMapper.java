@@ -2,6 +2,7 @@ package com.aoshi.dao;
 
 import com.aoshi.domain.CalPrize;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -23,4 +24,9 @@ public interface CalPrizeMapper {
     List<CalPrize> selectByLevelId(@Param(value = "prizeLevelId") Integer prizeLevelId);
 
     int updateAllData();
+
+    @Select("select * from cal_prize p left join cal_prize_level l on l.prize_level_id = p.prize_level_id left join cal_num_set ns on ns.num_set_id = p.num_set_id ")
+    @ResultMap("WithLevel")
+    List<CalPrize> selectAll();
+
 }
