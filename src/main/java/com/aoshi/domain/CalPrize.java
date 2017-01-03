@@ -11,6 +11,8 @@ public class CalPrize {
 
     private Integer remainTime;
 
+    private String prizeimg;
+
     private CalPrizeLevel level;
 
     private CalNumSet numSet;
@@ -70,5 +72,13 @@ public class CalPrize {
 
     public void setRemainTime(Integer remainTime) {
         this.remainTime = remainTime;
+    }
+
+    public String getPrizeimg() {
+        return prizeimg;
+    }
+
+    public void setPrizeimg(String prizeimg) {
+        this.prizeimg = prizeimg == null ? null : prizeimg.trim();
     }
 }
