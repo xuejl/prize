@@ -233,8 +233,8 @@ public class CalController {
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
     @RequestMapping("getPrizeById")
     @ResponseBody
-    public Map<String, Object> getPrizeById(Integer prizeLevelId) {
-        CalPrize calPrizes = calPrizeMapper.selectByPrimaryKey(prizeLevelId);
+    public Map<String, Object> getPrizeById(Integer prizeId) {
+        CalPrize calPrizes = calPrizeMapper.selectByPrimaryKey(prizeId);
         Map<String, Object> data = new HashMap<>();
         data.put("errorCode", 200);
         data.put("data", calPrizes);
