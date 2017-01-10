@@ -1,0 +1,12 @@
+127.0.0.1 - - [04/Jan/2017:16:25:53 +0800] "GET /redRain/prizeEdit.html?prizeId=1 HTTP/1.1" 200 3588 http-bio-8080-exec-1 205
+127.0.0.1 - - [04/Jan/2017:16:25:54 +0800] "GET /redRain/js/zoke.js HTTP/1.1" 304 - http-bio-8080-exec-2 7
+127.0.0.1 - - [04/Jan/2017:16:25:57 +0800] "GET /redRain/app/getCalNumSet HTTP/1.1" 200 125 http-bio-8080-exec-5 1397
+127.0.0.1 - - [04/Jan/2017:16:25:57 +0800] "GET /redRain/app/getPrizeById?prizeId=1 HTTP/1.1" 200 122 http-bio-8080-exec-3 1408
+127.0.0.1 - - [04/Jan/2017:16:25:57 +0800] "GET /redRain/app/getPrizeLevel HTTP/1.1" 200 266 http-bio-8080-exec-4 1401
+127.0.0.1 - - [04/Jan/2017:16:30:42 +0800] "GET /redRain/download HTTP/1.1" 500 7337 http-bio-8080-exec-1 604
+127.0.0.1 - - [04/Jan/2017:16:32:50 +0800] "GET /redRain/download HTTP/1.1" 500 6805 http-bio-8080-exec-1 691
+127.0.0.1 - - [04/Jan/2017:16:36:32 +0800] "GET /redRain/download HTTP/1.1" 500 7337 http-bio-8080-exec-1 618
+127.0.0.1 - - [04/Jan/2017:16:37:21 +0800] "GET /redRain/download HTTP/1.1" 200 57118 http-bio-8080-exec-1 536
+127.0.0.1 - - [04/Jan/2017:16:39:40 +0800] "GET /redRain/download HTTP/1.1" 200 57118 http-bio-8080-exec-8 125
+127.0.0.1 - - [04/Jan/2017:16:43:02 +0800] "GET /redRain/download HTTP/1.1" 200 57118 http-bio-8080-exec-1 585
+127.0.0.1 - - [04/Jan/2017:17:31:38 +0800] "GET /redRain/download HTTP/1.1" 200 57118 http-bio-8080-exec-1 598

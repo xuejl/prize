@@ -17,7 +17,8 @@ public class CalPrizeLevel {
         return prizeLevelName;
     }
 
-    public void setPrizeLevelName(String prizeLevelName) {
+    public CalPrizeLevel setPrizeLevelName(String prizeLevelName) {
         this.prizeLevelName = prizeLevelName == null ? null : prizeLevelName.trim();
+        return this;
     }
 }

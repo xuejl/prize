@@ -12,7 +12,7 @@
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 <script src="bootstrap/dist/js/bootstrap.js" ></script>
 <script src="js/angular.min.js" ></script>
-<body>
+<body ng-controller="ctrl"ng-app="app">
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div id="navbar" class="collapse navbar-collapse">
@@ -40,21 +40,29 @@
         <td>{{data.minNum}}</td>
         <td>{{data.time}}</td>
           <td>
-              <button type="button" class="btn btn-primary"
-              onclick="javascript:window.location.href=contactEdit.html?id={{data.numSetId}}">编辑</button>
+              <button type="button" class="btn btn-danger" ng-click="delete(data.numSetId)">删除</button>
           </td>
         </tr>
     </tbody>
 </table>
-<button type="button" class="btn btn-primary" onclick="add()">新增</button>
-<button type="button" class="btn btn-primary" onclick="delete()">删除</button>
+              <button type="button" class="btn btn-primary"
+              ng-click="add()">新增</button>
 </div>
 <script>
     var app = angular.module('app', [])
     app.controller('ctrl', function($scope, $http){
-        $http.get("").success(function(response){
-            $scope.dataList = response;
+        $http.get("app/getCalNumSet").success(function(response){
+            $scope.dataList = response.data;
         })
+
+        $scope.delete = function (numSetId) {
+            $http.get("app/delNumSet?numSetId=" + numSetId).success(function(response) {
+                history.go(0); 
+            }) 
+        }
+        $scope.add = function() {
+            location.href = "addNumSet.html";
+        }
     })
 
     function resetData(){
@@ -68,31 +76,8 @@
             })
         })
     }
-    
-    function delete() {
-        app.controller('ctrl', function($scope, $http){
-            $http.get("").success(function(response) {
-            if(response.errorCode == 200){
-                alert("删除成功")
-                history.go(0);
-            }else {
-                alert("删除失败");
-            }
-        })
-        
-    }
     function add() {
-        app.controller("ctrl", function($scope, $http)) {
-            $http.get().success(function(response) {
-                if(response.errorCode == 200) {
-                    alert("添加成功");
-                    history.go(0);
-                }else {
-                    alert("更新失败.请稍后再试") 
-                }
-            }) 
-        
-        })
+       location.href = "/addNumSet.html"; 
     }
 </script>
 

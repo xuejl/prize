@@ -119,6 +119,26 @@ public class CalController {
         codes.add(String.format("%04d", code));
     }
 
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("getAllRecords")
+    @ResponseBody
+    @Transactional
+    public Object getAllRecords() {
+        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(1);
+        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(1);
+
+        List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
+        return allRecords;
+    }
+
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("addPrizeLevel")
+    @ResponseBody
+    @Transactional
+    public void addPrizeLevel(String prizeLevelName) {
+        calPrizeLevelMapper.insert(new CalPrizeLevel().setPrizeLevelName(prizeLevelName));
+        return ;
+    }
     /**
      * 产生幸运码
      *
@@ -255,6 +275,20 @@ public class CalController {
         data.put("errorCode", 200);
         data.put("data", calNumSets);
         return data;
+    }
+
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("delNumSet")
+    @ResponseBody
+    public void delNumSet(Integer numSetId) {
+        calNumSetMapper.deleteByPrimaryKey(numSetId);
+    }
+
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("addNumSet")
+    @ResponseBody
+    public void addNumSet(CalNumSet numSet) {
+        calNumSetMapper.insertSelective(numSet);
     }
 
     /**
@@ -404,6 +438,21 @@ public class CalController {
         return data;
     }
 
+    /**
+     * 获取抽奖次数
+     *
+     * @param id 删除抽奖号码
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("delPrizeLevel")
+    @ResponseBody
+    public Map<String, Object> delPrizeLevel(@RequestParam(value = "id") Integer id) {
+        calPrizeLevelMapper.deleteByPrimaryKey(id);
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorCode", 200);
+        return data;
+    }
 }
 
 

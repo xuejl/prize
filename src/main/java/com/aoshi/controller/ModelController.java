@@ -113,7 +113,7 @@ public class ModelController {
         Assert.notNull(file);
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         StringBuffer sb = new StringBuffer();
-        String line = "";
+        String line;
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }
@@ -229,6 +229,9 @@ public class ModelController {
                 if(zipFile.exists()){
                     System.out.println(zipFilePath + "目录下存在名字为:" + fileName +"打包文件.");
                 }else{
+
+                    zipFile.createNewFile();
+
                     File[] sourceFiles = sourceFile.listFiles();
                     if(null == sourceFiles || sourceFiles.length<1){
                         System.out.println("待压缩的文件目录：" + sourceFilePath + "里面不存在文件，无需压缩.");
