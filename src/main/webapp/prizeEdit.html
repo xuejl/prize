@@ -29,21 +29,21 @@
 
   <div class="form-group">
   <label >奖品名称</label>
-    <input type="text" class="form-control" id="prizeName"
+    <input type="text" class="form-control" id="prizeName"  ng-model="prize.prizeName"
     value="{{prize.prizeName}}" placeholder="请输入奖品名称">
   </div>
 
   <div class="form-group">
-        <label>奖品等级</label>
-        <select class="form-control" >
-        <option ng-repeat="l in levels" value="{{prize.prizeLevelId}}">{{l.prizeLevelName}} </option>
+        <label>奖品等级{{prize.prizeLevelId}}</label>
+        <select class="form-control" ng-init="prize.prizeLevelId = levels[3].prizeLevelId" ng-model="prize.prizeLevelId" ng-options="l.prizeLevelName for l in levels ">
+
         </select>
   </div>
   
   <div class="form-group">
         <label>抽奖类型</label>
-        <select class="form-control" >
-      <option ng-repeat="calNum in calNumSets" value="prize.numSetId">一次抽{{calNum.time}}
+        <select class="form-control"  >
+      <option ng-repeat="calNum in calNumSets" value="{{calNum.numSetId}}" ng-model="calNum.numSetId">一次抽{{calNum.time}}
       最大值{{calNum.maxNum}}  最小值{{calNum.minNum}}</option>
       </select>
   </div>
@@ -51,21 +51,25 @@
   
   <div class="form-group">
         <label>奖品数量</label>
-        <input type="text" value = "{{prize.remainTime}}"id="remainTime">
+        <input type="text" value = "{{prize.remainTime}}"id="remainTime" ng-model="prize.remainTime">
   </div>
 
     <div class="form-group">
         <label>广告图片</label>
-        <input type="file" id="prizeImg" value = "{{prize.prizeImg}}">
+        <!--<input type="file" id="prizeImg" value = "{{prize.prizeImg}}">-->
+        <input type="file" file-model="myFile" />
+        <div class="col-md-12" style="margin-top: 20px;">
+            <img ng-src="{{prize.prizeImg}}" class="img-rounded" style="max-width:300px;max-height:300px; padding: 0px;" />
+            <!--<img ng-src="{{imageSrc}}" class="img-circle" style="max-width:300px;max-height:300px; padding: 0px;" />-->
+        </div>
     </div>
 
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-default" ng-click="keepTest()" >Submit</button>
 </form>
 <script>
     var app = angular.module('app', []);
     prizeId = zoke.getUrlElement("prizeId");
-    app.controller('ctrl', function($scope, $http){
-
+    app.controller('ctrl', function($scope, $http, fileReader){
         $http({
             method:'GET',
             url:'app/getPrizeById?prizeId=' + prizeId
@@ -96,8 +100,92 @@
              alert("网络连接异常");
         })
 
-    })
-</script>
+//        /*jQ的ajax提交*/
+        $scope.getFile = function() {
+            fileReader.readAsDataUrl($scope.file, $scope)
+                    .then(function(result) {
+                        $scope.prize.prizeImg = result;
+                    });
+        };
+        $scope.keepTest = function() {
+            var fd = new FormData();
 
+            var file = $scope.myFile;
+            var prizeName = $scope.prize.prizeName;
+            var remainTime = $scope.prize.remainTime;
+
+            fd.append('file', file);
+            fd.append('prizeName',prizeName);
+            fd.append('remainTime',remainTime);
+
+            $http({
+                method:'POST',
+                url:"app/testKeep",
+                data: fd,
+                headers: {'Content-Type':undefined},
+                transformRequest: angular.identity
+            })
+                    .success( function ( response )
+                    {
+                        //上传成功的操作
+                        alert("uplaod success");
+                    });
+
+        }
+    })
+    app.directive('fileModel', ['$parse', function($parse) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs, ngModel) {
+                var model = $parse(attrs.fileModel);
+                var modelSetter = model.assign;
+                element.bind('change', function(event) {
+                    scope.$apply(function() {
+                        modelSetter(scope, element[0].files[0]);
+                    });
+//附件预览
+                    console.log("directive");
+                    scope.file = (event.srcElement || event.target).files[0];
+                    scope.getFile();
+                });
+            }
+        };
+    }]);
+    app.factory('fileReader', ["$q", "$log", function($q, $log) {
+        var onLoad = function(reader, deferred, scope) {
+            return function() {
+                scope.$apply(function() {
+                    deferred.resolve(reader.result);
+                });
+            };
+        };
+
+        var onError = function(reader, deferred, scope) {
+            return function() {
+                scope.$apply(function() {
+                    deferred.reject(reader.result);
+                });
+            };
+        };
+
+        var getReader = function(deferred, scope) {
+            var reader = new FileReader();
+            reader.onload = onLoad(reader, deferred, scope);
+            reader.onerror = onError(reader, deferred, scope);
+            return reader;
+        };
+        console.log("factory");
+        var readAsDataURL = function(file, scope) {
+            var deferred = $q.defer();
+            var reader = getReader(deferred, scope);
+            reader.readAsDataURL(file);
+            return deferred.promise;
+        };
+
+        return {
+            readAsDataUrl: readAsDataURL
+        };
+    }])
+</script>
 </body>
 </html>
