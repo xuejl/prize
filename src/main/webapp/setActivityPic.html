@@ -34,13 +34,18 @@
 
     <div class="form-group">
         <label>广告图片</label>
-        <input type="file" id="prizeImg" value = "{{prize.prizeImg}}">
+        <!--<input type="file" id="prizeImg" value = "{{prize.prizeImg}}">-->
+        <input type="file" file-model="myFile" />
+        <div class="col-md-12" style="margin-top: 20px;">
+            <img ng-src="{{imageSrc}}" class="img-rounded" style="max-width:300px;max-height:300px; padding: 0px;" />
+            <!--<img ng-src="{{imageSrc}}" class="img-circle" style="max-width:300px;max-height:300px; padding: 0px;" />-->
+        </div>
     </div>
 
-    <button type="submit" class="btn btn-default" onclick="commitFile()">Submit</button>
+    <button type="submit" class="btn btn-default" ng-click="commitFile()">Submit</button>
 </form>
 <script>
-    app.controller('ctrl', function($scope, $http){
+    app.controller('ctrl', function($scope, $http, fileReader){
         $http({
             method:'GET',
             url:'app/getCalNumSet'
@@ -50,15 +55,94 @@
         }, function errorCallback(response) {
             alert("网络连接异常");
         })
+
+        $scope.getFile = function() {
+            fileReader.readAsDataUrl($scope.file, $scope)
+                    .then(function(result) {
+
+                        $scope.imageSrc = result;
+                    });
+        };
+        $scope.commitFile = function() {
+            var fd = new FormData();
+            var file = $scope.myFile;
+            fd.append('file', file);
+            $http({
+                method:'POST',
+                url:"app/uploadFile",
+                data: fd,
+                headers: {'Content-Type':undefined},
+                transformRequest: angular.identity
+            })
+                    .success( function ( response )
+                    {
+                        //上传成功的操作
+                        alert("uplaod success");
+                    });
+
+        }
     })
-    function commitFile() {
-        $("#prizeImg").AjaxFileUpload({
-            action: "app/uploadFile",
-            onComplete:function (fileName, response) {
-                console.log("fileName == > " + fileName );
+//    function commitFile() {
+//        $("#prizeImg").AjaxFileUpload({
+//            action: "app/uploadFile",
+//            onComplete:function (fileName, response) {
+//                console.log("fileName == > " + fileName );
+//            }
+//        });
+//    }
+    app.directive('fileModel', ['$parse', function($parse) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs, ngModel) {
+                var model = $parse(attrs.fileModel);
+                var modelSetter = model.assign;
+                element.bind('change', function(event) {
+                    scope.$apply(function() {
+                        modelSetter(scope, element[0].files[0]);
+                    });
+//附件预览
+                    console.log("directive");
+                    scope.file = (event.srcElement || event.target).files[0];
+                    scope.getFile();
+                });
             }
-        });
-    }
+        };
+    }]);
+    app.factory('fileReader', ["$q", "$log", function($q, $log) {
+        var onLoad = function(reader, deferred, scope) {
+            return function() {
+                scope.$apply(function() {
+                    deferred.resolve(reader.result);
+                });
+            };
+        };
+
+        var onError = function(reader, deferred, scope) {
+            return function() {
+                scope.$apply(function() {
+                    deferred.reject(reader.result);
+                });
+            };
+        };
+
+        var getReader = function(deferred, scope) {
+            var reader = new FileReader();
+            reader.onload = onLoad(reader, deferred, scope);
+            reader.onerror = onError(reader, deferred, scope);
+            return reader;
+        };
+        console.log("factory");
+        var readAsDataURL = function(file, scope) {
+            var deferred = $q.defer();
+            var reader = getReader(deferred, scope);
+            reader.readAsDataURL(file);
+            return deferred.promise;
+        };
+
+        return {
+            readAsDataUrl: readAsDataURL
+        };
+    }])
 </script>
 
 </body>
