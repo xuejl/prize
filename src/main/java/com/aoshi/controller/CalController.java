@@ -490,9 +490,6 @@ public class CalController {
         }
     }
 
-
-}
-
     /**
      * 获取抽奖次数
      *
@@ -500,12 +497,29 @@ public class CalController {
      * @return
      */
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
-    @RequestMapping("uploadFile")
+    @RequestMapping(value = "uploadFile", produces = { "application/json" }, method =RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> uploadFile(MultipartFile file) {
-        return new HashMap<String, Object>(){{
-            put("a","a");
-        }};
+    public String uploadFile(MultipartFile file, HttpServletRequest request ) {
+        String fileName = "index.jpg";
+        String path=request.getSession().getServletContext().getRealPath("upload");
+
+        try {
+                File indexFile = new File(path, fileName);
+                if (indexFile.exists()) {
+                    indexFile.delete();
+                }
+                //保存
+                try {
+                    file.transferTo(indexFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "200";
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return null;
+        }
 
     }
 
