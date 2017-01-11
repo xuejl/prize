@@ -13,37 +13,34 @@
 <script src="bootstrap/dist/js/bootstrap.js" ></script>
 <script src="js/angular.min.js" ></script>
 <script src="js/zoke.js"> </script>
-<body  ng-app="app" ng-controller="ctrl">
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">中奖列表</a></li>
-                <li><a href="prize.html">奖品管理</a></li>
-                <li><a href="contact.html">抽奖配置</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
+<script src="js/common.js"></script>
+<body  ng-app="app" >
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="reset">
+    <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li ><a href="index.html">中奖列表</a></li>
+            <li><a href="prize.html">奖品管理</a></li>
+            <li><a href="contact.html" class="active" >抽奖配置</a></li>
+            <li><a href="prizeLevel.html">奖品等级配置</a></li>
+            <li><a href="javascript:void(0)" ng-click="resetData()">重置</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
     </div>
 </nav>
-<form role="form" style="padding-top: 60px">
+<form role="form" style="padding-top: 60px" ng-controller="ctrl">
 
   <div class="form-group">
   <label >最大值</label>
-    <input ng-model="maxNum" type="text" class="form-control"
-    id="prizeName" placeholder="输入抽奖数量的最大值">
-
+    <input ng-model="maxNum" type="text" class="form-control" placeholder="输入抽奖数量的最大值">
   <label >最小值</label>
-    <input ng-model="minNum" type="text" class="form-control"
-    id="prizeName" placeholder="输入抽奖数量的最小值">
+    <input ng-model="minNum" type="text" class="form-control" placeholder="输入抽奖数量的最小值">
   <label >一次抽奖的数量</label>
-    <input ng-model="time" type="text" class="form-control"
-    id="prizeName" placeholder="输入一次抽奖的数量">
+    <input ng-model="time" type="text" class="form-control" placeholder="输入一次抽奖的数量">
   </div>
 
   <button type="button" ng-click = "addPrizeLevel(prizeLevelName)" class="btn btn-default">Submit</button>
 </form>
 <script>
-    var app = angular.module('app', []);
     prizeId = zoke.getUrlElement("prizeId");
     app.controller('ctrl', function($scope, $http){
         $scope.addPrizeLevel = function(prizeLevelName) {

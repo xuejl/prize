@@ -12,18 +12,21 @@
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 <script src="bootstrap/dist/js/bootstrap.js" ></script>
 <script src="js/angular.min.js" ></script>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li ><a href="index.html">中奖列表</a></li>
-                <li class="active"><a href="prize.html">奖品管理</a></li>
-                <li><a href="contact.html">抽奖配置</a></li>
-                </ul> 
-        </div><!--/.nav-collapse -->
+<script src="js/common.js"></script>
+<body ng-app="app" >
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="reset">
+    <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li ><a href="index.html">中奖列表</a></li>
+            <li class="active"><a href="prize.html">奖品管理</a></li>
+            <li><a href="contact.html">抽奖配置</a></li>
+            <li><a href="prizeLevel.html">奖品等级配置</a></li>
+            <li><a href="javascript:void(0)" ng-click="resetData()">重置</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
     </div>
 </nav>
+
 <div class="panel panel-default" style="padding-top: 50px">
   <div class="panel-heading">奖品管理</div>
 <table name="contact" class="table" >
@@ -34,7 +37,7 @@
       <th>剩余次数</th>
       <th>操作</th>
     </thead>
-    <tbody ng-app="app" ng-controller="ctrl">
+    <tbody  ng-controller="ctrl">
         <tr ng-repeat="prize in prizeList">
         <td>{{prize.prizeName}}</td>
         <td>{{prize.level.prizeLevelName}}</td>
@@ -50,7 +53,6 @@
 </table>
 </div>
 <script>
-    var app = angular.module('app', [])
     app.controller('ctrl', function($scope, $http){
         $http.get("app/prizeList").success(function(response){
             console.log("response == >" + JSON.stringify(response));
@@ -60,7 +62,6 @@
             window.open("prizeEdit.html?prizeId=" + prizeId);
         }
     })
-
 </script>
 
 </body>

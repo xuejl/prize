@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,8 +138,9 @@ public class CalController {
     @Transactional
     public void addPrizeLevel(String prizeLevelName) {
         calPrizeLevelMapper.insert(new CalPrizeLevel().setPrizeLevelName(prizeLevelName));
-        return ;
+        return;
     }
+
     /**
      * 产生幸运码
      *
@@ -453,6 +455,21 @@ public class CalController {
         data.put("errorCode", 200);
         return data;
     }
+
+    /**
+     * 获取抽奖次数
+     *
+     * @param file 删除抽奖号码
+     * @return
+     */
+    @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping("uploadFile")
+    @ResponseBody
+    public Map<String, Object> uploadFile(MultipartFile file) {
+        return new HashMap<String, Object>(){{
+            put("a","a");
+        }};
+
+    }
+
 }
-
-
