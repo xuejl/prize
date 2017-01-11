@@ -485,9 +485,14 @@ public class CalController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            return null;
         }
+        calPrize.setPrizeimg(request.getRemoteAddr() +":" +request.getServerPort() +request.getContextPath() + File.separator + "upload" + File.separator + fileName);
+        if (calPrize.getPrizeId() == null) {
+            calPrizeMapper.insertSelective(calPrize);
+        } else {
+            calPrizeMapper.updateByPrimaryKey(calPrize);
+        }
+        return "";
     }
 
     /**
