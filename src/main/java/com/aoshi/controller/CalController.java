@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -467,36 +468,28 @@ public class CalController {
     @RequestMapping(value = "testKeep", produces = { "application/json" }, method =RequestMethod.POST)
     @ResponseBody
     public String testKeep(CalPrize calPrize, @RequestParam(value = "file", required = false) MultipartFile file,HttpServletRequest request) {
-        boolean flag = false;
-        String ftpFile = UuidUtil.get32UUID() + ".jpg";;
-        String ftpDir = Const.LOGOFILEPATHIMG;
-        if(!StringUtils.isEmpty(file.getOriginalFilename())){
-            try {
-                flag = ftpUpload(file.getBytes(), ftpFile,ftpDir);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if(flag){
-            calPrize.setPrizeimg(ftpDir+"/"+ftpFile);
-        }
-        return null;
-    }
+        String fileName = UuidUtil.get32UUID() + ".jpg";;
+        String path=request.getSession().getServletContext().getRealPath("upload");
 
-    private boolean ftpUpload(byte[] bytes,String ftpFile,String ftpDir){
-        String path = Const.FILEPATHIMGDIR + ftpDir;
-        //byte[] bytes = Base64.decode(goodsImg);
-
-        FtpConManager ftpConManager = FtpConManager.getInstance();
         try {
-            ftpConManager.login(PropertyUtils.getFTP_URL(),
-                    PropertyUtils.getFTP_USERNAME(),
-                    PropertyUtils.getFTP_PASS());
+                File targetFile = new File(path, fileName);
+                if(!targetFile.exists()){
+                    targetFile.mkdirs();
+                //保存
+                try {
+                    file.transferTo(targetFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            return null;
         }
-        return ftpConManager.uploadFileByInputStream(new ByteArrayInputStream(bytes), path, ftpFile);
     }
+
+
 }
 
 
