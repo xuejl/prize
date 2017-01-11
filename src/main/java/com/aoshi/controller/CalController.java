@@ -8,14 +8,23 @@ import com.aoshi.domain.CalNumRecord;
 import com.aoshi.domain.CalNumSet;
 import com.aoshi.domain.CalPrize;
 import com.aoshi.domain.CalPrizeLevel;
+import com.aoshi.util.Const;
+import com.aoshi.util.FtpConManager;
+import com.aoshi.util.PropertyUtils;
+import com.aoshi.util.UuidUtil;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -455,6 +464,41 @@ public class CalController {
         data.put("errorCode", 200);
         return data;
     }
+
+    @RequestMapping(value = "testKeep", produces = { "application/json" }, method =RequestMethod.POST)
+    @ResponseBody
+    public String testKeep(CalPrize calPrize, @RequestParam(value = "file", required = false) MultipartFile file,HttpServletRequest request) {
+        boolean flag = false;
+        String ftpFile = UuidUtil.get32UUID() + ".jpg";;
+        String ftpDir = Const.LOGOFILEPATHIMG;
+        if(!StringUtils.isEmpty(file.getOriginalFilename())){
+            try {
+                flag = ftpUpload(file.getBytes(), ftpFile,ftpDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if(flag){
+            calPrize.setPrizeimg(ftpDir+"/"+ftpFile);
+        }
+        return null;
+    }
+
+    private boolean ftpUpload(byte[] bytes,String ftpFile,String ftpDir){
+        String path = Const.FILEPATHIMGDIR + ftpDir;
+        //byte[] bytes = Base64.decode(goodsImg);
+
+        FtpConManager ftpConManager = FtpConManager.getInstance();
+        try {
+            ftpConManager.login(PropertyUtils.getFTP_URL(),
+                    PropertyUtils.getFTP_USERNAME(),
+                    PropertyUtils.getFTP_PASS());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ftpConManager.uploadFileByInputStream(new ByteArrayInputStream(bytes), path, ftpFile);
+    }
+}
 
     /**
      * 获取抽奖次数
