@@ -34,10 +34,12 @@
   </div>
 
   <div class="form-group">
-        <label>奖品等级{{prize.prizeLevelId}}</label>
-        <select class="form-control" ng-init="prize.prizeLevelId = levels[3].prizeLevelId" ng-model="prize.prizeLevelId" ng-options="l.prizeLevelName for l in levels ">
-
-        </select>
+        <label>奖品等级{{levelName}}  ========== >{{levels}} </label>
+        <!--<select class="form-control">-->
+            <!--<option {{'' === l.prizeLevelName?'selected':''}} ng-repeat='l in levels'>{{l.}}</option>-->
+        <!--</select>-->
+      <select class="form-control" ng-options="l.prizeLevelName for l in levels  "  ng-model="levelName">
+      </select>
   </div>
   
   <div class="form-group">
@@ -86,6 +88,11 @@
         }).then(function successCallback(response) {
              console.log(JSON.stringify(response.data));
              $scope.levels= response.data.data;
+             for (i = 0; i < $scope.levels.length; i++) {
+                 if ($scope.levels[i].prizeLevelId == $scope.prize.prizeLevelId) {
+                     $scope.levelName = $scope.levels[i];
+                 }
+             }
         }, function errorCallback(response) {
              alert("网络连接异常");
         })
@@ -117,7 +124,8 @@
             fd.append('file', file);
             fd.append('prizeName',prizeName);
             fd.append('remainTime',remainTime);
-
+            fd.append('prizeLevelId',$scope.levelName.prizeLevelId);
+            return
             $http({
                 method:'POST',
                 url:"app/testKeep",
