@@ -33,6 +33,7 @@
       <th>抽奖号码最大值</th> 
       <th>抽奖号码最小值</th>
       <th>剩余次数</th>
+      <th>是否剔除尾号4</th>
       <th>操作</th>
     </thead>
     <tbody>
@@ -40,6 +41,7 @@
         <td>{{data.maxNum}}</td>
         <td>{{data.minNum}}</td>
         <td>{{data.time}}</td>
+        <td>{{data.isReject =='Y' ? '是' : '否'}}</td>
           <td>
               <button type="button" class="btn btn-danger" ng-click="delete(data.numSetId)">删除</button>
           </td>

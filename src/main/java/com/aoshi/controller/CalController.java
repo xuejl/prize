@@ -1,35 +1,22 @@
 package com.aoshi.controller;
 
-import com.aoshi.dao.CalNumRecordMapper;
-import com.aoshi.dao.CalNumSetMapper;
-import com.aoshi.dao.CalPrizeLevelMapper;
-import com.aoshi.dao.CalPrizeMapper;
+import com.aoshi.dao.*;
 import com.aoshi.domain.CalNumRecord;
 import com.aoshi.domain.CalNumSet;
 import com.aoshi.domain.CalPrize;
 import com.aoshi.domain.CalPrizeLevel;
-import com.aoshi.util.Const;
-import com.aoshi.util.FtpConManager;
-import com.aoshi.util.PropertyUtils;
 import com.aoshi.util.UuidUtil;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * CalController
@@ -59,61 +46,88 @@ public class CalController {
     @ResponseBody
     @Transactional
     public Object getRandomCode(Integer calNumId, Integer prizeId) {
-        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(calNumId);
-        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(calNumId);
-
-        List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
-
-        if (allRecords.size() == 0) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("errorCode", 1001);
-            data.put("errorMsg", "活动已经结束");
-            return data;
-        }
         CalPrize calPrize = calPrizeMapper.selectByPrimaryKey(prizeId);
-        if (calPrize.getRemainTime() <= 0) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("errorCode", 1001);
-            data.put("errorMsg", "该奖品已经被抽完");
-            return data;
-        }
         Map<String, Object> data = new HashMap<>();
-        List<String> codes = new ArrayList<>();
-        if (calNumId == 1) {
-            if (calPrize.getRemainTime() > 4) {
-                int count = calPrize.getRemainTime();
-                for (int i = 0; i < count; i++) {
-                    createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
-                }
-            } else {
-                createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
-
+        if(calPrize!=null){
+            if (calPrize.getRemainTime() <= 0) {
+                data.put("errorCode", 1001);
+                data.put("errorMsg", "该奖品已经被抽完");
+                return data;
             }
-            data.put("errorMsg", codes);
-            data.put("errorCode", 200);
-        } else {
-            List<Integer> luckCode = new ArrayList<>();
-//            抽取30桌
-            if (prizeId == 11) {
-                for (int i = 0; i < 30; i++) {
-                    Integer code = genLuckCode(calNumId, prizeId, allRecords, calPrize);
-                    luckCode.add(code);
+            CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(calPrize.getNumSetId());
+            if(calNumSet!=null){
+                //中奖的记录
+                List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(calNumSet.getNumSetId());
+                //移除已中奖的
+                List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
+                int len = allRecords.size();
+                Set<Object> list = new HashSet<Object>();
+                Random random = new Random();
+                if(calNumSet.getIsReject().equals(BoolCodeEnum.YES.toCode())){
+                    //剔除尾号4
+                    for(int i=0;i<allRecords.size();i++){
+                        if (allRecords.get(i) %10 ==4){
+                            allRecords.remove(i);
+                        }
+                    }
+                    int len2 =len-allRecords.size();//计算剔除后的list大小
+                    if (len-len2 == 0) {
+                        data.put("errorCode", 1001);
+                        data.put("errorMsg", "活动已经结束");
+                        return data;
+                    }
+                }else {
+                    //不剔除尾号4
+                    if (len == 0) {
+                        data.put("errorCode", 1001);
+                        data.put("errorMsg", "活动已经结束");
+                        return data;
+                    }
                 }
+                Object[] array = allRecords.toArray();
+                //未中奖的数组剩余的次数小于等于一次抽的次数，取未中奖的数组剩余的次数，否则取一次抽的次数
+                if(allRecords.size()<=calNumSet.getTime()){
+                    // 生成随机数字并存入list（从移除已中奖的数组之间产生随机数，取一次抽奖的次数）
+                    for(int i=0;i<array.length;i++){
+                        for(CalNumRecord record :calNumRecords){
+                            if(record.getRecordNum() !=array[i]){
+                                list.add(array[i]);
+                            }
+                        }
+                    }
+                }else {
+                    // 生成随机数字并存入list（从移除已中奖的数组之间产生随机数，取一次抽奖的次数）
+                    while (list.size()<calNumSet.getTime()){
+                        int arrIdx = random.nextInt(array.length);
+                        Object number =array[arrIdx];
+                        if(!calNumRecords.isEmpty()){
+                            for(CalNumRecord record :calNumRecords){
+                                if(record.getRecordNum() !=number){
+                                    list.add(number);
+                                }
+                            }
+                        }else {
+                            list.add(number);
+                        }
 
-                data.put("errorCode", 200);
-                data.put("errorMsg", luckCode);
-//                抽取40桌
-            } else if (prizeId == 12) {
-                for (int i = 0; i < 20; i++) {
-                    Integer code = genLuckCode(calNumId, prizeId, allRecords, calPrize);
-                    luckCode.add(code);
+                    }
                 }
-                data.put("errorCode", 200);
-                data.put("errorMsg", luckCode);
+                //保存中奖记录
+                Iterator<Object> it = list.iterator();
+                while (it.hasNext()) {
+                    CalNumRecord record = new CalNumRecord();
+                    record.setRecordNum((Integer)it.next());
+                    record.setPrizeId(prizeId);
+                    record.setNumSetId(calNumSet.getNumSetId());
+                    calNumRecordMapper.insert(record);
+                }
+                //更新剩余次数
+                calPrize.setRemainTime(calPrize.getRemainTime() - 1);
+                calPrizeMapper.updateByPrimaryKeySelective(calPrize);
+                data.put("successCode", 1001);
+                data.put("successMsg", "中奖号码为："+list);
             }
         }
-
-
         return data;
     }
 

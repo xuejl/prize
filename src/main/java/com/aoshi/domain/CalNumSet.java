@@ -9,6 +9,8 @@ public class CalNumSet {
 
     private Integer time;
 
+    private String isReject;
+
     public Integer getNumSetId() {
         return numSetId;
     }
@@ -39,5 +41,13 @@ public class CalNumSet {
 
     public void setTime(Integer time) {
         this.time = time;
+    }
+
+    public String getIsReject() {
+        return isReject;
+    }
+
+    public void setIsReject(String isReject) {
+        this.isReject = isReject;
     }
 }

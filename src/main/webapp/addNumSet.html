@@ -36,6 +36,9 @@
     <input ng-model="minNum" type="text" class="form-control" placeholder="输入抽奖数量的最小值">
   <label >一次抽奖的数量</label>
     <input ng-model="time" type="text" class="form-control" placeholder="输入一次抽奖的数量">
+  <label >是否剔除尾号4</label><br />
+     <input type="radio" value="Y" ng-model="state" name="selectState" ng-checked="true">&nbsp;是
+     <input type="radio" value="N" ng-model="state" name="selectState">&nbsp;否
   </div>
 
   <button type="button" ng-click = "addPrizeLevel(prizeLevelName)" class="btn btn-default">Submit</button>
@@ -44,10 +47,11 @@
     prizeId = zoke.getUrlElement("prizeId");
     app.controller('ctrl', function($scope, $http){
         $scope.addPrizeLevel = function(prizeLevelName) {
+            $scope.state = 'Y';
              $http({
                  method:'GET',
                  url:'app/addNumSet',
-                 params:{maxNum:$scope.maxNum,minNum:$scope.minNum,time:$scope.time}
+                 params:{maxNum:$scope.maxNum,minNum:$scope.minNum,time:$scope.time,isReject:$scope.state}
              }).then(function successCallback(response) {
                  alert("添加抽奖配置成功");
                  console.log(JSON.stringify(response.data));
