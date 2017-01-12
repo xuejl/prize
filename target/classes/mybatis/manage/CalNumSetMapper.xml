@@ -6,9 +6,10 @@
     <result column="max_num" jdbcType="INTEGER" property="maxNum" />
     <result column="min_num" jdbcType="INTEGER" property="minNum" />
     <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="isReject" jdbcType="VARCHAR" property="isReject" />
   </resultMap>
   <sql id="Base_Column_List">
-    num_set_id, max_num, min_num, time
+    num_set_id, max_num, min_num, time, isReject
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -22,9 +23,9 @@
   </delete>
   <insert id="insert" parameterType="com.aoshi.domain.CalNumSet">
     insert into cal_num_set (num_set_id, max_num, min_num, 
-      time)
+      time, isReject)
     values (#{numSetId,jdbcType=INTEGER}, #{maxNum,jdbcType=INTEGER}, #{minNum,jdbcType=INTEGER}, 
-      #{time,jdbcType=INTEGER})
+      #{time,jdbcType=INTEGER}, #{isReject,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.aoshi.domain.CalNumSet">
     insert into cal_num_set
@@ -41,6 +42,9 @@
       <if test="time != null">
         time,
       </if>
+      <if test="isReject != null">
+        isReject,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="numSetId != null">
@@ -54,6 +58,9 @@
       </if>
       <if test="time != null">
         #{time,jdbcType=INTEGER},
+      </if>
+      <if test="isReject != null">
+        #{isReject,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -69,6 +76,9 @@
       <if test="time != null">
         time = #{time,jdbcType=INTEGER},
       </if>
+      <if test="isReject != null">
+        isReject = #{isReject,jdbcType=VARCHAR},
+      </if>
     </set>
     where num_set_id = #{numSetId,jdbcType=INTEGER}
   </update>
@@ -76,7 +86,8 @@
     update cal_num_set
     set max_num = #{maxNum,jdbcType=INTEGER},
       min_num = #{minNum,jdbcType=INTEGER},
-      time = #{time,jdbcType=INTEGER}
+      time = #{time,jdbcType=INTEGER},
+      isReject = #{isReject,jdbcType=VARCHAR}
     where num_set_id = #{numSetId,jdbcType=INTEGER}
   </update>
 
