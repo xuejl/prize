@@ -56,9 +56,8 @@
         <label>广告图片</label>
         <!--<input type="file" id="prizeImg" value = "{{prize.prizeImg}}">-->
         <input type="file" file-model="myFile" />
-        <div class="col-md-12" style="margin-top: 20px;">
-            <img ng-src="{{prize.prizeImg}}" class="img-rounded" style="max-width:300px;max-height:300px; padding: 0px;" />
-            <!--<img ng-src="{{imageSrc}}" class="img-circle" style="max-width:300px;max-height:300px; padding: 0px;" />-->
+        <div class="col-md-12" style="margin-top: 20px;" >
+            <img ng-src="{{prize.prizeimg}}" class="img-rounded"  style="max-width:300px;max-height:300px; padding: 0px;" />
         </div>
     </div>
 
@@ -142,8 +141,8 @@
                 transformRequest: angular.identity
             }).success( function ( response ) {
                         //上传成功的操作
-                        alert("修改成功");
-                        location.href = document.referrer;
+                alert("修改成功");
+                location.href = document.referrer;
             });
 
         }

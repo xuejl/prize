@@ -59,62 +59,63 @@ public class CalController {
     @ResponseBody
     @Transactional
     public Object getRandomCode(Integer calNumId, Integer prizeId) {
-        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(calNumId);
-        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(calNumId);
+        return "1";
+//        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(calNumId);
+//        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(calNumId);
+//
+//        List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
+//
+//        if (allRecords.size() == 0) {
+//            Map<String, Object> data = new HashMap<>();
+//            data.put("errorCode", 1001);
+//            data.put("errorMsg", "活动已经结束");
+//            return data;
+//        }
+//        CalPrize calPrize = calPrizeMapper.selectByPrimaryKey(prizeId);
+//        if (calPrize.getRemainTime() <= 0) {
+//            Map<String, Object> data = new HashMap<>();
+//            data.put("errorCode", 1001);
+//            data.put("errorMsg", "该奖品已经被抽完");
+//            return data;
+//        }
+//        Map<String, Object> data = new HashMap<>();
+//        List<String> codes = new ArrayList<>();
+//        if (calNumId == 1) {
+//            if (calPrize.getRemainTime() > 4) {
+//                int count = calPrize.getRemainTime();
+//                for (int i = 0; i < count; i++) {
+//                    createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
+//                }
+//            } else {
+//                createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
+//
+//            }
+//            data.put("errorMsg", codes);
+//            data.put("errorCode", 200);
+//        } else {
+//            List<Integer> luckCode = new ArrayList<>();
+////            抽取30桌
+//            if (prizeId == 11) {
+//                for (int i = 0; i < 30; i++) {
+//                    Integer code = genLuckCode(calNumId, prizeId, allRecords, calPrize);
+//                    luckCode.add(code);
+//                }
+//
+//                data.put("errorCode", 200);
+//                data.put("errorMsg", luckCode);
+////                抽取40桌
+//            } else if (prizeId == 12) {
+//                for (int i = 0; i < 20; i++) {
+//                    Integer code = genLuckCode(calNumId, prizeId, allRecords, calPrize);
+//                    luckCode.add(code);
+//                }
+//                data.put("errorCode", 200);
+//                data.put("errorMsg", luckCode);
+//            }
+//        }
 
-        List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
 
-        if (allRecords.size() == 0) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("errorCode", 1001);
-            data.put("errorMsg", "活动已经结束");
-            return data;
-        }
-        CalPrize calPrize = calPrizeMapper.selectByPrimaryKey(prizeId);
-        if (calPrize.getRemainTime() <= 0) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("errorCode", 1001);
-            data.put("errorMsg", "该奖品已经被抽完");
-            return data;
-        }
-        Map<String, Object> data = new HashMap<>();
-        List<String> codes = new ArrayList<>();
-        if (calNumId == 1) {
-            if (calPrize.getRemainTime() > 4) {
-                int count = calPrize.getRemainTime();
-                for (int i = 0; i < count; i++) {
-                    createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
-                }
-            } else {
-                createCode(calNumId, prizeId, allRecords, calPrize, data, codes);
-
-            }
-            data.put("errorMsg", codes);
-            data.put("errorCode", 200);
-        } else {
-            List<Integer> luckCode = new ArrayList<>();
-//            抽取30桌
-            if (prizeId == 11) {
-                for (int i = 0; i < 30; i++) {
-                    Integer code = genLuckCode(calNumId, prizeId, allRecords, calPrize);
-                    luckCode.add(code);
-                }
-
-                data.put("errorCode", 200);
-                data.put("errorMsg", luckCode);
-//                抽取40桌
-            } else if (prizeId == 12) {
-                for (int i = 0; i < 20; i++) {
-                    Integer code = genLuckCode(calNumId, prizeId, allRecords, calPrize);
-                    luckCode.add(code);
-                }
-                data.put("errorCode", 200);
-                data.put("errorMsg", luckCode);
-            }
-        }
-
-
-        return data;
+//        return data;
     }
 
     private void createCode(Integer calNumId, Integer prizeId, List<Integer> allRecords, CalPrize calPrize, Map<String, Object> data, List<String> codes) {
@@ -135,8 +136,8 @@ public class CalController {
     @ResponseBody
     @Transactional
     public Object getAllRecords() {
-        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(1);
-        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(1);
+        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(4);
+        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(0);
 
         List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
         return allRecords;
@@ -474,19 +475,17 @@ public class CalController {
 
         try {
                 File targetFile = new File(path, fileName);
-                if(!targetFile.exists()){
-                    targetFile.mkdirs();
                 //保存
                 try {
                     file.transferTo(targetFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        calPrize.setPrizeimg(request.getRemoteAddr() +":" +request.getServerPort() +request.getContextPath() + File.separator + "upload" + File.separator + fileName);
+        calPrize.setPrizeimg("http://"+request.getRemoteAddr() +":" +request.getServerPort() +request.getContextPath() + File.separator + "upload" + File.separator + fileName);
+        calPrize.setPrizeimg(request.getRequestURL().toString().replace(request.getRequestURI(), "")+request.getContextPath() + File.separator + "upload" + File.separator + fileName);
         if (calPrize.getPrizeId() == null) {
             calPrizeMapper.insertSelective(calPrize);
         } else {
