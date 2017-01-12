@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.*;
 
@@ -149,8 +152,8 @@ public class CalController {
     @ResponseBody
     @Transactional
     public Object getAllRecords() {
-        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(1);
-        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(1);
+        CalNumSet calNumSet = calNumSetMapper.selectByPrimaryKey(4);
+        List<CalNumRecord> calNumRecords = calNumRecordMapper.selectAll(0);
 
         List<Integer> allRecords = removePrizeNum(calNumSet, calNumRecords);
         return allRecords;
@@ -488,20 +491,23 @@ public class CalController {
 
         try {
                 File targetFile = new File(path, fileName);
-                if(!targetFile.exists()){
-                    targetFile.mkdirs();
                 //保存
                 try {
                     file.transferTo(targetFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            return null;
         }
+        calPrize.setPrizeimg("http://"+request.getRemoteAddr() +":" +request.getServerPort() +request.getContextPath() + File.separator + "upload" + File.separator + fileName);
+        calPrize.setPrizeimg(request.getRequestURL().toString().replace(request.getRequestURI(), "")+request.getContextPath() + File.separator + "upload" + File.separator + fileName);
+        if (calPrize.getPrizeId() == null) {
+            calPrizeMapper.insertSelective(calPrize);
+        } else {
+            calPrizeMapper.updateByPrimaryKey(calPrize);
+        }
+        return "";
     }
 
     /**

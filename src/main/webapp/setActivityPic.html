@@ -37,11 +37,11 @@
         <!--<input type="file" id="prizeImg" value = "{{prize.prizeImg}}">-->
         <input type="file" file-model="myFile" />
         <div class="col-md-12" style="margin-top: 20px;">
-            <img ng-src="{{imageSrc}}" class="img-rounded" style="max-width:300px;max-height:300px; padding: 0px;" />
+            <img src="upload/index.jpg" class="img-rounded" style="max-width:300px;max-height:300px; padding: 0px;" />
             <!--<img ng-src="{{imageSrc}}" class="img-circle" style="max-width:300px;max-height:300px; padding: 0px;" />-->
         </div>
     </div>
-
+没有啊
     <button type="submit" class="btn btn-default" ng-click="commitFile()">Submit</button>
 </form>
 <script>
@@ -78,6 +78,7 @@
                     {
                         //上传成功的操作
                         alert("uplaod success");
+                        location.href = document.referrer;
                     });
 
         }

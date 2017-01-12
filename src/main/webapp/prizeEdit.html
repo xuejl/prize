@@ -36,20 +36,14 @@
   </div>
 
   <div class="form-group">
-        <label>奖品等级{{levelName}}  ========== >{{levels}} </label>
-        <!--<select class="form-control">-->
-            <!--<option {{'' === l.prizeLevelName?'selected':''}} ng-repeat='l in levels'>{{l.}}</option>-->
-        <!--</select>-->
-      <select class="form-control" ng-options="l.prizeLevelName for l in levels  "  ng-model="levelName">
+        <label>奖品等级</label>
+      <select class="form-control" ng-options="l.prizeLevelName for l in levels"  ng-model="levelName">
       </select>
   </div>
   
   <div class="form-group">
         <label>抽奖类型</label>
-        <select class="form-control"  >
-      <option ng-repeat="calNum in calNumSets" value="{{calNum.numSetId}}" ng-model="calNum.numSetId">一次抽{{calNum.time}}
-      最大值{{calNum.maxNum}}  最小值{{calNum.minNum}}</option>
-      </select>
+      <select class="form-control" ng-options="calNum.minNum for calNum in calNumSets"  ng-model="calNumSets1"></select>
   </div>
   
   
@@ -62,9 +56,8 @@
         <label>广告图片</label>
         <!--<input type="file" id="prizeImg" value = "{{prize.prizeImg}}">-->
         <input type="file" file-model="myFile" />
-        <div class="col-md-12" style="margin-top: 20px;">
-            <img ng-src="{{prize.prizeImg}}" class="img-rounded" style="max-width:300px;max-height:300px; padding: 0px;" />
-            <!--<img ng-src="{{imageSrc}}" class="img-circle" style="max-width:300px;max-height:300px; padding: 0px;" />-->
+        <div class="col-md-12" style="margin-top: 20px;" >
+            <img ng-src="{{prize.prizeimg}}" class="img-rounded"  style="max-width:300px;max-height:300px; padding: 0px;" />
         </div>
     </div>
 
@@ -79,34 +72,47 @@
         }).then(function successCallback(response) {
              console.log(JSON.stringify(response.data));
              $scope.prize = response.data.data;
+             $scope.getPrizeLevel();
+             $scope.getCalNumSet();
+
         }, function errorCallback(response) {
              alert("网络连接异常");
         })
 
-        $http({
-            method:'GET',
-            url:'app/getPrizeLevel'
-        }).then(function successCallback(response) {
-             console.log(JSON.stringify(response.data));
-             $scope.levels= response.data.data;
-             for (i = 0; i < $scope.levels.length; i++) {
-                 if ($scope.levels[i].prizeLevelId == $scope.prize.prizeLevelId) {
-                     $scope.levelName = $scope.levels[i];
-                 }
-             }
-        }, function errorCallback(response) {
-             alert("网络连接异常");
-        })
+        $scope.getPrizeLevel = function() {
+            $http({
+                method: 'GET',
+                url: 'app/getPrizeLevel'
+            }).then(function successCallback(response) {
+                console.log(JSON.stringify(response.data));
+                $scope.levels = response.data.data;
+                for (i = 0; i < $scope.levels.length; i++) {
+                    if ($scope.levels[i].prizeLevelId == $scope.prize.prizeLevelId) {
+                        $scope.levelName = $scope.levels[i];
+                    }
+                }
+            }, function errorCallback(response) {
+                alert("网络连接异常");
+            })
+        }
+        $scope.getCalNumSet = function() {
+            $http({
+                method: 'GET',
+                url: 'app/getCalNumSet'
+            }).then(function successCallback(response) {
+                console.log(JSON.stringify(response.data));
+                $scope.calNumSets = response.data.data;
+                for (i = 0; i < $scope.calNumSets.length; i++) {
+                    $scope.calNumSets[i].minNum = "一次抽" + $scope.calNumSets[i].time + "最大值" + $scope.calNumSets[i].maxNum + "最小值" + $scope.calNumSets[i].minNum;
 
-        $http({
-            method:'GET',
-            url:'app/getCalNumSet'
-        }).then(function successCallback(response) {
-             console.log(JSON.stringify(response.data));
-             $scope.calNumSets = response.data.data;
-        }, function errorCallback(response) {
-             alert("网络连接异常");
-        })
+                    if ($scope.calNumSets[i].numSetId == $scope.prize.numSetId) {
+                        $scope.calNumSets1 = $scope.calNumSets[i];
+                    }
+                }
+            }, function errorCallback(response) {
+                alert("网络连接异常");
+            })
+        }
 
 //        /*jQ的ajax提交*/
         $scope.getFile = function() {
@@ -119,25 +125,25 @@
             var fd = new FormData();
 
             var file = $scope.myFile;
-            var prizeName = $scope.prize.prizeName;
-            var remainTime = $scope.prize.remainTime;
 
             fd.append('file', file);
-            fd.append('prizeName',prizeName);
-            fd.append('remainTime',remainTime);
+            fd.append('prizeName',$scope.prize.prizeName);
+            fd.append('prizeId',$scope.prize.prizeId);
+            fd.append('remainTime',$scope.prize.remainTime);
+            fd.append('numSetId',$scope.calNumSets1.numSetId);
             fd.append('prizeLevelId',$scope.levelName.prizeLevelId);
+            console.log(JSON.stringify(fd));
             $http({
                 method:'POST',
                 url:"app/testKeep",
                 data: fd,
                 headers: {'Content-Type':undefined},
                 transformRequest: angular.identity
-            })
-                    .success( function ( response )
-                    {
+            }).success( function ( response ) {
                         //上传成功的操作
-                        alert("uplaod success");
-                    });
+                alert("修改成功");
+                location.href = document.referrer;
+            });
 
         }
     })
