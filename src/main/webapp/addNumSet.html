@@ -36,7 +36,7 @@
     <input ng-model="minNum" type="text" class="form-control" placeholder="输入抽奖数量的最小值">
   <label >一次抽奖的数量</label>
     <input ng-model="time" type="text" class="form-control" placeholder="输入一次抽奖的数量">
-  <label >是否剔除尾号4</label><br />
+  <label >类型设置</label><br />
   <input type="radio" value="0" ng-model="lotteryType" name="selectlotteryType" ng-checked="true">&nbsp;台号
   <input type="radio" value="1" ng-model="lotteryType" name="selectlotteryType">&nbsp;个人<br />
   <label >是否剔除尾号4</label><br />
@@ -50,8 +50,17 @@
     prizeId = zoke.getUrlElement("prizeId");
     app.controller('ctrl', function($scope, $http){
         $scope.addPrizeLevel = function(prizeLevelName) {
-            $scope.state = 'Y';
-            $scope.lotteryType = '0';
+            if($scope.state==undefined){
+                $scope.state = 'Y';
+            }
+
+            if($scope.lotteryType==undefined){
+                $scope.lotteryType = '0';
+            }
+
+            alert($scope.lotteryType)
+            alert($scope.state)
+            return
              $http({
                  method:'GET',
                  url:'app/addNumSet',
