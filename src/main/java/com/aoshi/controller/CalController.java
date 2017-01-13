@@ -63,7 +63,7 @@ public class CalController {
                 int len = allRecords.size();
                 Set<Object> list = new HashSet<Object>();
                 Random random = new Random();
-                if(calNumSet.getIsReject().equals(BoolCodeEnum.YES.toCode())){
+                if(calNumSet.getIsreject().equals(BoolCodeEnum.YES.toCode())){
                     //剔除尾号4
                     for(int i=0;i<allRecords.size();i++){
                         if (allRecords.get(i) %10 ==4){
@@ -125,7 +125,8 @@ public class CalController {
                 calPrize.setRemainTime(calPrize.getRemainTime() - 1);
                 calPrizeMapper.updateByPrimaryKeySelective(calPrize);
                 data.put("successCode", 1001);
-                data.put("successMsg", "中奖号码为："+list);
+                String type = calNumSet.getLotteryType().equals("0") ? "台号" : "个人号";
+                data.put("successMsg", "中奖号码为："+ type + list);
             }
         }
         return data;
@@ -273,7 +274,7 @@ public class CalController {
     /**
      * 根据奖品等级获取奖品
      *
-     * @param prizeLevelId
+     * @param prizeId
      * @return
      */
     @CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST})

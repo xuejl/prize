@@ -9,7 +9,9 @@ public class CalNumSet {
 
     private Integer time;
 
-    private String isReject;
+    private String isreject;
+
+    private String lotteryType;
 
     public Integer getNumSetId() {
         return numSetId;
@@ -43,11 +45,19 @@ public class CalNumSet {
         this.time = time;
     }
 
-    public String getIsReject() {
-        return isReject;
+    public String getIsreject() {
+        return isreject;
     }
 
-    public void setIsReject(String isReject) {
-        this.isReject = isReject;
+    public void setIsreject(String isreject) {
+        this.isreject = isreject;
+    }
+
+    public String getLotteryType() {
+        return lotteryType;
+    }
+
+    public void setLotteryType(String lotteryType) {
+        this.lotteryType = lotteryType;
     }
 }
