@@ -50,8 +50,8 @@
         </tr>
     </tbody>
 </table>
-              <button ng-controller="add" type="button" class="btn btn-primary" ng-click="add()">新增</button>
 </div>
+<button ng-controller="add" type="button" class="btn btn-primary" ng-click="add()">新增</button>
 <script>
     app.controller('ctrl', function($scope, $http){
         $http.get("app/getCalNumSet").success(function(response){

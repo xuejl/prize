@@ -298,9 +298,15 @@ public class CalController {
     @ResponseBody
     public Map<String, Object> getCalNumSet() {
         List<CalNumSet> calNumSets = calNumSetMapper.selectAll();
+        List<CalNumSet> calNumSetsShow = new ArrayList<>();
+        for(CalNumSet c:calNumSets){
+            String str = "一次抽" + c.getTime().toString() + "，最大值" + c.getMaxNum().toString() + "，最小值" + c.getMinNum().toString();
+            c.setStr(str);
+            calNumSetsShow.add(c);
+        }
         Map<String, Object> data = new HashMap<>();
         data.put("errorCode", 200);
-        data.put("data", calNumSets);
+        data.put("data", calNumSetsShow);
         return data;
     }
 
@@ -481,6 +487,7 @@ public class CalController {
         return data;
     }
 
+    //新增或修改奖品
     @RequestMapping(value = "testKeep", produces = { "application/json" }, method =RequestMethod.POST)
     @ResponseBody
     public String testKeep(CalPrize calPrize, @RequestParam(value = "file", required = false) MultipartFile file,HttpServletRequest request) {
@@ -540,5 +547,4 @@ public class CalController {
         }
 
     }
-
 }

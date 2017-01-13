@@ -52,6 +52,7 @@
     </tbody>
 </table>
 </div>
+ <button ng-controller="add" type="button" class="btn btn-primary" ng-click="add()">新增</button>
 <script>
     app.controller('ctrl', function($scope, $http){
         $http.get("app/prizeList").success(function(response){
@@ -60,6 +61,11 @@
         })
         $scope.goEdit = function(prizeId) {
             window.open("prizeEdit.html?prizeId=" + prizeId);
+        }
+    })
+    app.controller('add', function($scope, $http){
+        $scope.add = function() {
+            location.href = "addPrize.html";
         }
     })
 </script>

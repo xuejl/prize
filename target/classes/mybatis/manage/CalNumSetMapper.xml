@@ -6,10 +6,11 @@
     <result column="max_num" jdbcType="INTEGER" property="maxNum" />
     <result column="min_num" jdbcType="INTEGER" property="minNum" />
     <result column="time" jdbcType="INTEGER" property="time" />
-    <result column="isReject" jdbcType="VARCHAR" property="isReject" />
+    <result column="isReject" jdbcType="VARCHAR" property="isreject" />
+    <result column="lottery_type" jdbcType="VARCHAR" property="lotteryType" />
   </resultMap>
   <sql id="Base_Column_List">
-    num_set_id, max_num, min_num, time, isReject
+    num_set_id, max_num, min_num, time, isReject, lottery_type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -23,9 +24,11 @@
   </delete>
   <insert id="insert" parameterType="com.aoshi.domain.CalNumSet">
     insert into cal_num_set (num_set_id, max_num, min_num, 
-      time, isReject)
+      time, isReject, lottery_type
+      )
     values (#{numSetId,jdbcType=INTEGER}, #{maxNum,jdbcType=INTEGER}, #{minNum,jdbcType=INTEGER}, 
-      #{time,jdbcType=INTEGER}, #{isReject,jdbcType=VARCHAR})
+      #{time,jdbcType=INTEGER}, #{isreject,jdbcType=VARCHAR}, #{lotteryType,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.aoshi.domain.CalNumSet">
     insert into cal_num_set
@@ -42,8 +45,11 @@
       <if test="time != null">
         time,
       </if>
-      <if test="isReject != null">
+      <if test="isreject != null">
         isReject,
+      </if>
+      <if test="lotteryType != null">
+        lottery_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -59,8 +65,11 @@
       <if test="time != null">
         #{time,jdbcType=INTEGER},
       </if>
-      <if test="isReject != null">
-        #{isReject,jdbcType=VARCHAR},
+      <if test="isreject != null">
+        #{isreject,jdbcType=VARCHAR},
+      </if>
+      <if test="lotteryType != null">
+        #{lotteryType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -76,8 +85,11 @@
       <if test="time != null">
         time = #{time,jdbcType=INTEGER},
       </if>
-      <if test="isReject != null">
-        isReject = #{isReject,jdbcType=VARCHAR},
+      <if test="isreject != null">
+        isReject = #{isreject,jdbcType=VARCHAR},
+      </if>
+      <if test="lotteryType != null">
+        lottery_type = #{lotteryType,jdbcType=VARCHAR},
       </if>
     </set>
     where num_set_id = #{numSetId,jdbcType=INTEGER}
@@ -87,7 +99,8 @@
     set max_num = #{maxNum,jdbcType=INTEGER},
       min_num = #{minNum,jdbcType=INTEGER},
       time = #{time,jdbcType=INTEGER},
-      isReject = #{isReject,jdbcType=VARCHAR}
+      isReject = #{isreject,jdbcType=VARCHAR},
+      lottery_type = #{lotteryType,jdbcType=VARCHAR}
     where num_set_id = #{numSetId,jdbcType=INTEGER}
   </update>
 
