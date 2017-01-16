@@ -30,16 +30,15 @@ public class ModelController {
     Logger logger = LoggerFactory.getLogger(ModelController.class);
 
     private static final String ZIP_FILE_NAME = "model.zip";
-//    private static final String oldPath = "D:\\xjl_code\\Prize\\src\\main\\webapp\\model";
-//    private static final String newPath = "D:\\xjl_code\\Prize\\src\\main\\webapp\\file";
-    private static final String path = "D:\\xjl_code\\Prize\\src\\main\\webapp\\test2\\";
 
     @RequestMapping("download")
     public String downLoadFile(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+
+        String path = session.getServletContext().getRealPath("/") + File.separator + "test2"+"/";
         File file = getModelFile(session);
 //        List<String> contents = getDataFromDataBase();
 
-        List<List<String>> contents = getDataFromDataBase();
+        List<List<String>> contents = getDataFromDataBase(path);
 
         String fileContent = getModelFileToString(file);
         fileContent = replaceModelTag(fileContent, contents);
@@ -156,7 +155,7 @@ public class ModelController {
      * 从数据库里面获取数据
      * @return
      */
-    public List<List<String>> getDataFromDataBase() {
+    public List<List<String>> getDataFromDataBase(String path) {
         Map map = new HashMap();
         List list = new ArrayList();
         List list1 = new ArrayList();
