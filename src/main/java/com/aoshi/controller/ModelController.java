@@ -87,8 +87,8 @@ public class ModelController {
                                     .replace(String.format("(%s)", String.valueOf(i)), contents.get(i).get(2))//经营项目
                                     .replace(String.format("<%s>", String.valueOf(i)), contents.get(i).get(3))//店铺位置
                                     .replace(String.format("{%s)", String.valueOf(i)), contents.get(i).get(4))//网址
-                                    .replace(String.format("(%s}", String.valueOf(i)), contents.get(i).get(5))//图片
-                                    .replace(String.format("<%s}", String.valueOf(i)), contents.get(i).get(6));//背景
+//                                    .replace(String.format("(%s}", String.valueOf(i)), contents.get(i).get(5))//图片
+                                    .replace(String.format("<%s}", String.valueOf(i)), contents.get(i).get(5));//背景
         }
         return fileContent;
     }
@@ -161,17 +161,17 @@ public class ModelController {
         List list = new ArrayList();
         List list1 = new ArrayList();
         String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png";
-        String url2 = "file:///C:/Users/Administrator/Desktop/zhengjiaguangchang/images/rightpage.png";
+//        String url2 = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png";
         String url3 = "http://pic64.nipic.com/file/20150414/19328392_141611475424_2.jpg";
         String img = downloadFromUrl(url, path);
-        String img2 = downloadFromUrl(url2, path);
+//        String img2 = downloadFromUrl(url2, path);
         String img3 = downloadFromUrl(url3, path);
             list.add(img);
             list.add("店铺");
             list.add("经营项目");
             list.add("位置");
             list.add("https://www.baidu.com/");
-            list.add(img2);
+//            list.add(img2);
             list.add(img3);
 
         for(int i=0;i<40;i++){
