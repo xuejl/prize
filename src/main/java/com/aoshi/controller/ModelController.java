@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -34,20 +32,24 @@ public class ModelController {
     private static final String ZIP_FILE_NAME = "model.zip";
 //    private static final String oldPath = "D:\\xjl_code\\Prize\\src\\main\\webapp\\model";
 //    private static final String newPath = "D:\\xjl_code\\Prize\\src\\main\\webapp\\file";
-    private static final String path = "D:\\xjl_code\\Prize\\src\\main\\webapp\\new\\";
+    private static final String path = "D:\\xjl_code\\Prize\\src\\main\\webapp\\test2\\";
 
     @RequestMapping("download")
     public String downLoadFile(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         File file = getModelFile(session);
-        List<String> contents = getDataFromDataBase();
+//        List<String> contents = getDataFromDataBase();
+
+        List<List<String>> contents = getDataFromDataBase();
+
         String fileContent = getModelFileToString(file);
         fileContent = replaceModelTag(fileContent, contents);
         //生成模板新的html
         byte tag_bytes[] = fileContent.getBytes();
         // 根据"new"+模板名得到文件名。
-        String fileame = "new"+ file.getName().substring(0,file.getName().indexOf(".")) + ".html";
+//        String fileame = "new"+ file.getName().substring(0,file.getName().indexOf(".")) + ".html";
+        String fileame =  file.getName().substring(0,file.getName().indexOf(".")) + ".html";
         // 生成的html文件保存路径。
-        fileame = session.getServletContext().getRealPath("/") + File.separator + "new" +"/"+ fileame;
+        fileame = session.getServletContext().getRealPath("/") + File.separator + "test2" +"/"+ fileame;
         FileOutputStream fileoutputstream = new FileOutputStream(fileame);// 建立文件输出流
         fileoutputstream.write(tag_bytes);
         fileoutputstream.close();
@@ -56,7 +58,7 @@ public class ModelController {
         //GenZipFileInLocal(session, fileContent);
 
         //压缩zip文件
-        fileToZip(session.getServletContext().getRealPath("/") + File.separator + "new" ,
+        fileToZip(session.getServletContext().getRealPath("/") + File.separator + "test2" ,
                 session.getServletContext().getRealPath("/") + File.separator + "file", ZIP_FILE_NAME);
         try {
             getClientFile(response, ZIP_FILE_NAME, session);
@@ -78,9 +80,15 @@ public class ModelController {
      * @param fileContent
      * @param contents
      */
-    private String replaceModelTag(String fileContent, List<String> contents) throws IOException {
+    private String replaceModelTag(String fileContent, List<List<String>> contents) throws IOException {
         for (int i = 0; i < contents.size(); i++) {
-            fileContent = fileContent.replace(String.format("[%s]", String.valueOf(i+1)), contents.get(i));
+            fileContent = fileContent.replace(String.format("{%s}", String.valueOf(i)), contents.get(i).get(0))//店铺图片
+                                    .replace(String.format("[%s]", String.valueOf(i)), contents.get(i).get(1))//店名
+                                    .replace(String.format("(%s)", String.valueOf(i)), contents.get(i).get(2))//经营项目
+                                    .replace(String.format("<%s>", String.valueOf(i)), contents.get(i).get(3))//店铺位置
+                                    .replace(String.format("{%s)", String.valueOf(i)), contents.get(i).get(4))//网址
+                                    .replace(String.format("(%s}", String.valueOf(i)), contents.get(i).get(5))//图片
+                                    .replace(String.format("<%s}", String.valueOf(i)), contents.get(i).get(6));//背景
         }
         return fileContent;
     }
@@ -148,15 +156,36 @@ public class ModelController {
      * 从数据库里面获取数据
      * @return
      */
-    public List<String> getDataFromDataBase() {
-        return new ArrayList<String>(){{
-            add("android移动开发");
-            add("IOS移动开发");
-            add("Html5前端开发");
-            String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png";
-            String img = downloadFromUrl(url, path);
-            add(img);
-        }};
+    public List<List<String>> getDataFromDataBase() {
+        Map map = new HashMap();
+        List list = new ArrayList();
+        List list1 = new ArrayList();
+        String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png";
+        String url2 = "file:///C:/Users/Administrator/Desktop/zhengjiaguangchang/images/rightpage.png";
+        String url3 = "http://pic64.nipic.com/file/20150414/19328392_141611475424_2.jpg";
+        String img = downloadFromUrl(url, path);
+        String img2 = downloadFromUrl(url2, path);
+        String img3 = downloadFromUrl(url3, path);
+            list.add(img);
+            list.add("店铺");
+            list.add("经营项目");
+            list.add("位置");
+            list.add("https://www.baidu.com/");
+            list.add(img2);
+            list.add(img3);
+
+        for(int i=0;i<40;i++){
+            list1.add(list);
+        }
+        return list1;
+//        return new ArrayList<String>(){{
+//            add("android移动开发");
+//            add("IOS移动开发");
+//            add("Html5前端开发");
+//            String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png";
+//            String img = downloadFromUrl(url, path);
+//            add(img);
+//        }};
     }
 
     /**
@@ -166,7 +195,7 @@ public class ModelController {
     public File getModelFile(HttpSession session) {
         String path = session.getServletContext().getRealPath("/") + File.separator;
         logger.debug("app", "path == > " + path);
-        return new File(path + "model" + File.separator + "modelA.html");
+        return new File(path + "model" + File.separator + "sdzs-01.html");
     }
 
     /**
@@ -229,9 +258,6 @@ public class ModelController {
                 if(zipFile.exists()){
                     System.out.println(zipFilePath + "目录下存在名字为:" + fileName +"打包文件.");
                 }else{
-
-                    zipFile.createNewFile();
-
                     File[] sourceFiles = sourceFile.listFiles();
                     if(null == sourceFiles || sourceFiles.length<1){
                         System.out.println("待压缩的文件目录：" + sourceFilePath + "里面不存在文件，无需压缩.");

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8"/>
+<title>正佳广场</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<link href="sub.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+function nTabs(thisObj,Num){
+if(thisObj.className == "active")return;
+var tabObj = thisObj.parentNode.id;
+var tabList = document.getElementById(tabObj).getElementsByTagName("li");
+for(i=0; i <tabList.length; i++)
+{
+  if (i == Num)
+  {
+   thisObj.className = "active";
+      document.getElementById(tabObj+"_Content"+i).style.display = "block";
+  }else{
+   tabList[i].className = "normal";
+   document.getElementById(tabObj+"_Content"+i).style.display = "none";
+  }
+}
+}
+</script>
+</head>
+
+<body>
+     <div class="sidebar_b">
+           <div class="nTab">
+             <div class="TabContent">
+                      <div id="myTab1_Content0">
+                           <!--旺铺招商-----开始1-->
+                                <iframe MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="sdzs-01.html" height=995 width=1980></iframe>
+                        <!--结束1-->
+                      </div>
+                      <div id="myTab1_Content1" class="none">
+                           <!--户外招商---开始1-->
+                                <iframe MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no src="sdzs-02.html" height=995 width=1980></iframe>
+                           <!--结束1-->
+                      </div>
+                 </div>
+          </div>
+      </div>
+<div class="bottom_return">
+     <strong>美食休闲</strong>
+     <span><a href="javascript:;" onclick="javascript:history.go(-1);"><img src="images/fanhui.png"></a></span>
+     <ul id="myTab1">
+        <li class="active" onclick="nTabs(this,0);">餐饮</li>
+        <li class="normal" onclick="nTabs(this,1);">休闲</li>
+     </ul>
+</div>
+<!-- Swiper JS -->
+    <script src="JS/swiper.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        spaceBetween: 30
+    });
+    </script>
+</body>
+</html>
