@@ -46,7 +46,9 @@
         <td>
         <button type="button" class="btn btn-primary"
                 ng-click =goEdit(prize.prizeId)>编辑</button>
-       
+
+            <button type="button" class="btn btn-warning"
+                    ng-click =goDelete(prize.prizeId)>删除</button>
         </td>
         </tr>
     </tbody>
@@ -61,6 +63,13 @@
         })
         $scope.goEdit = function(prizeId) {
             window.open("prizeEdit.html?prizeId=" + prizeId);
+        }
+        $scope.goDelete = function(prizeId) {
+            $http.get("app/deletePrize").success(function (response) {
+                console.log("response == >" + JSON.stringify(response));
+                alert("删除成功");
+                history.go(0);
+            })
         }
     })
     app.controller('add', function($scope, $http){

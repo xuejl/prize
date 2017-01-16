@@ -45,7 +45,7 @@ public class CalController {
     @RequestMapping("getRandomCode")
     @ResponseBody
     @Transactional
-    public Object getRandomCode(Integer calNumId, Integer prizeId) {
+    public Object getRandomCode(Integer prizeId) {
         CalPrize calPrize = calPrizeMapper.selectByPrimaryKey(prizeId);
         Map<String, Object> data = new HashMap<>();
         if(calPrize!=null){
@@ -124,9 +124,11 @@ public class CalController {
                 //更新剩余次数
                 calPrize.setRemainTime(calPrize.getRemainTime() - 1);
                 calPrizeMapper.updateByPrimaryKeySelective(calPrize);
-                data.put("successCode", 1001);
-                String type = calNumSet.getLotteryType().equals("0") ? "台号" : "个人号";
-                data.put("successMsg", "中奖号码为："+ type + list);
+                data.put("errorCode", 200);
+//                0 桌号 1 代表个人号
+                Integer type = calNumSet.getLotteryType().equals("0") ? 0 : 1 ;
+                data.put("data", list);
+                data.put("errorMsg", type);
             }
         }
         return data;
@@ -188,6 +190,7 @@ public class CalController {
         calPrizeMapper.updateByPrimaryKeySelective(calPrize);
         return code;
     }
+
 
     /**
      * 移除中奖号码
@@ -349,16 +352,7 @@ public class CalController {
     @ResponseBody
     public Map<String, Object> resetData() {
         calNumRecordMapper.cleanTable();
-        for (int i = 0; i < 1512; i++) {
-            String index = String.valueOf(i);
-            if (index.substring(index.length() - 1, index.length()).equals("4")) {
-                CalNumRecord calNumRecord = new CalNumRecord();
-                calNumRecord.setPrizeId(0);
-                calNumRecord.setRecordNum(i);
-                calNumRecord.setNumSetId(0);
-                calNumRecordMapper.insert(calNumRecord);
-            }
-        }
+
         calPrizeMapper.updateAllData();
         Map<String, Object> data = new HashMap<>();
         data.put("errorCode", 200);
