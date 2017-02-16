@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * CalController
@@ -73,43 +74,28 @@ public class CalController {
                     int len2 =len-allRecords.size();//计算剔除后的list大小
                     if (len-len2 == 0) {
                         data.put("errorCode", 1001);
-                        data.put("errorMsg", "活动已经结束");
+                        data.put("errorMsg", "中奖号码已经被抽完");
                         return data;
                     }
                 }else {
                     //不剔除尾号4
                     if (len == 0) {
                         data.put("errorCode", 1001);
-                        data.put("errorMsg", "活动已经结束");
+                        data.put("errorMsg", "中奖号码已经被抽完");
                         return data;
                     }
                 }
-                Object[] array = allRecords.toArray();
-                //未中奖的数组剩余的次数小于等于一次抽的次数，取未中奖的数组剩余的次数，否则取一次抽的次数
-                if(allRecords.size()<=calNumSet.getTime()){
-                    // 生成随机数字并存入list（从移除已中奖的数组之间产生随机数，取一次抽奖的次数）
-                    for(int i=0;i<array.length;i++){
-                        for(CalNumRecord record :calNumRecords){
-                            if(record.getRecordNum() !=array[i]){
-                                list.add(array[i]);
-                            }
-                        }
-                    }
-                }else {
-                    // 生成随机数字并存入list（从移除已中奖的数组之间产生随机数，取一次抽奖的次数）
-                    while (list.size()<calNumSet.getTime()){
-                        int arrIdx = random.nextInt(array.length);
-                        Object number =array[arrIdx];
-                        if(!calNumRecords.isEmpty()){
-                            for(CalNumRecord record :calNumRecords){
-                                if(record.getRecordNum() !=number){
-                                    list.add(number);
-                                }
-                            }
-                        }else {
+                if(calPrize.getRemainTime() <= calNumSet.getTime()) { //一次抽N个号码和奖品数量比较
+                    while( calPrize.getRemainTime()  != list.size()) {
+                            int arrIdx = random.nextInt(allRecords.size());
+                            Object number = allRecords.get(arrIdx);
                             list.add(number);
-                        }
-
+                    }
+                } else {
+                    while(calNumSet.getTime() != list.size()) {
+                        int arrIdx = random.nextInt(allRecords.size());
+                        Object number = allRecords.get(arrIdx);
+                        list.add(number);
                     }
                 }
                 //保存中奖记录
@@ -122,7 +108,7 @@ public class CalController {
                     calNumRecordMapper.insert(record);
                 }
                 //更新剩余次数
-                calPrize.setRemainTime(calPrize.getRemainTime() - 1);
+                calPrize.setRemainTime(calPrize.getRemainTime() - list.size());
                 calPrizeMapper.updateByPrimaryKeySelective(calPrize);
                 data.put("errorCode", 200);
 //                0 桌号 1 代表个人号
